@@ -15,6 +15,7 @@
 
     var projection = d3.geoMercator()
                            .scale(MAP_SCALE)
+                           .center([40.7128, 74.0060])
                            .translate([MAP_WIDTH / 2, MAP_HEIGHT / 2]);
     var path = d3.geoPath().projection(projection);
 
