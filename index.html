@@ -27,7 +27,7 @@
     var mapLayer = g.append('g')
                     .classed('map-layer', true);
 
-    d3.json('data/nyc-bouroughs.geojson', function(error, mapData) {
+    d3.json('data/nyc-boroughs.geojson', function(error, mapData) {
       var features = mapData.features;
 
       mapLayer.selectAll('path')
