@@ -11,11 +11,11 @@
   <script>
     var MAP_WIDTH = 1000;
     var MAP_HEIGHT = 500;
-    var MAP_SCALE = 1000;
+    var MAP_SCALE = 50000;
 
     var projection = d3.geoMercator()
                            .scale(MAP_SCALE)
-                           .center([40.7128, 74.0060])
+                           .center([-74.0, 40.7])
                            .translate([MAP_WIDTH / 2, MAP_HEIGHT / 2]);
     var path = d3.geoPath().projection(projection);
 
@@ -28,14 +28,13 @@
     var mapLayer = g.append('g')
                     .classed('map-layer', true);
 
-    d3.json('data/nyc-boroughs.geojson', function(error, mapData) {
-      var features = mapData.features;
+    d3.json('data/nyc-boroughs.geojson', function(error, nycData) {
 
       mapLayer.selectAll('path')
-              .data(features)
+              .data(nycData.features)
               .enter().append('path')
               .attr('d', path)
-              .style('fill', 'grey');
+              .style('fill', 'steelblue');
     });
 
   </script>
