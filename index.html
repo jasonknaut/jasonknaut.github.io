@@ -31,9 +31,8 @@
     d3.json('data/nyc-boroughs.geojson', function(error, nycData) {
 
       mapLayer.selectAll('path')
-              .data(nycData.features)
               .enter().append('path')
-              .attr('d', path)
+              .attr('d', path(nycData))
               .style('fill', 'steelblue');
     });
 
