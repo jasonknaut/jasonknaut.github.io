@@ -2,21 +2,28 @@
 <html lang="en">
 <head>
   <title>CS498 Data Viz -- Final Project</title>
-
   <link href="css/main.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Roboto:300,400" rel="stylesheet">
   <meta charset='utf-8'>
 </head>
 <body>
   <div id="content">
-    <h1 class="center">Take a Ride Through the <br/>New York City Bikeshare System.</h1>
-    <h3 class="center">by Jason Knaut</h3>
-    <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-      in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-      in culpa qui officia deserunt mollit anim id est laborum.</h2>
-    <button id="about-btn">About this Visualization</button>
-    <div id="slide-nav" class="hidden">Slide Navigation</div>
+    <div class="slide-contents">
+      <h1 class="center">Take a Ride Through the <br/>New York City Bikeshare System.</h1>
+      <h3 class="center">by Jason Knaut</h3>
+      <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+        in culpa qui officia deserunt mollit anim id est laborum.</h2>
+        <button id="about-btn" class="text-btn">About this Visualization</button>
+    </div>
+    <!-- Navigation to select slides in the slideshow -->
+    <div id="slide-nav" class="hidden">
+        <button class="slide-btn selected">1</button>
+        <button class="slide-btn">2</button>
+        <button class="slide-btn">3</button>
+        <button class="slide-btn">4</button>
+    </div>
   </div>
   <div id="left-nav" class="hidden"><div class="btn-round"><img src="images/left-arrow.svg" alt="Go Back"></div></div>
   <div id="right-nav" class="hidden"><div class="btn-round"><img src="images/right-arrow.svg" alt="Go Forward"></div></div>

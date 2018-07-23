@@ -72,11 +72,11 @@ h3 {
 
 #slide-nav {
   position: absolute;
-  margin: 0 auto;
   text-align: center;
   bottom: 0;
   left: 0;
   min-width: 100%;
+  height: 100px;
   min-height: 100px;
   background: #00192e;
 }
@@ -100,8 +100,9 @@ h3 {
 }
 
 
-/* GRAPHICAL ELEMENTS */
+/* UI ELEMENTS */
 button, .btn-round {
+  display: inline-block;
   background: #033c66;
   cursor: pointer;
   text-align: center;
@@ -111,21 +112,28 @@ button, .btn-round {
   -ms-appearance: none;
   -o-appearance: none;
   appearance: none;
-}
-
-button {
-  display: inline-block;
-  border-radius: 20px;
-  line-height: 40px;
-  min-height: 40px;
-  padding: 0 30px;
   font-size: 14px;
   font-weight: 400;
   text-transform: uppercase;
   outline: none;
 }
 
-button:hover, .btn-round:hover {
+.text-btn {
+  border-radius: 20px;
+  line-height: 40px;
+  min-height: 40px;
+  padding: 0 30px;
+}
+
+.slide-btn {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 50px;
+  margin: 25px;
+}
+
+button:hover, .btn-round:hover, .slide-btn.selected {
     background: #13639f;
 }
 
@@ -149,6 +157,15 @@ button:hover, .btn-round:hover {
     width: 50%;
     padding: 25%;
     height: auto;
+}
+
+.slide-ico {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 50px;
+  background: #033c66;
+  margin: 25px;
 }
 
 .visible {
