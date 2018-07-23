@@ -1,0 +1,97 @@
+/* GENERAL FORMATTING */
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+body {
+  margin: 0 auto;
+  min-width: 1000px;
+  min-height: 700px;
+  width:100%;
+  height: 100%;
+  background-color: #002040;
+}
+
+h1 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 36px;
+  font-weight: 400;
+  padding-top: 1em;
+  padding-bottom: 0.3em;
+}
+
+h3 {
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  padding-top:0.2em;
+  padding-bottom:0.2em;
+  text-transform: uppercase;
+}
+
+/* PRIMARY LAYOUT FORMATTING */
+
+#content {
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+}
+
+#slide-nav {
+  position: absolute;
+  margin: auto;
+  text-align: center;
+  bottom: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 75px;
+}
+
+/* GRAPHICAL ELEMENTS */
+button, .btn-round {
+  background: #033c66;
+  cursor: pointer;
+  text-align: center;
+  transition: background 75ms ease-in-out;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+button {
+  display: inline-block;
+  border-radius: 20px;
+  line-height: 40px;
+  min-height: 40px;
+  padding: 0 30px;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  outline: none;
+}
+
+button:hover, .btn-round:hover {
+    background: #13639f;
+}
+
+.btn-round {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.btn-round img {
+    display: inline;
+    width: 50%;
+    padding: 25%;
+    height: auto;
+}
