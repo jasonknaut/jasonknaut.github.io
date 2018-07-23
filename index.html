@@ -9,16 +9,38 @@
 </head>
 <body>
   <div id="content">
-    <h1>2017 NYC Bikeshare System Usage</h1>
-    <h3>by Jason Knaut</h3>
-    <h2>Future text goes here...</h2>
-    <button>About this Visualization</button>
+    <h1 class="center">Take a Ride Through the <br/>New York City Bikeshare System.</h1>
+    <h3 class="center">by Jason Knaut</h3>
+    <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+      in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+      in culpa qui officia deserunt mollit anim id est laborum.</h2>
+    <button id="about-btn">About this Visualization</button>
+    <div id="slide-nav" class="hidden">Slide Navigation</div>
   </div>
-  <div id="slide-controls">
-    <div class="btn-round"><img src="images/left-arrow.svg" alt="Go Back"></div>
-    <div class="btn-round"><img src="images/right-arrow.svg" alt="Go Forward"></div>
-  </div>
-  <div id="slide-nav">Slide Navigation</div>
+  <div id="left-nav" class="hidden"><div class="btn-round"><img src="images/left-arrow.svg" alt="Go Back"></div></div>
+  <div id="right-nav" class="hidden"><div class="btn-round"><img src="images/right-arrow.svg" alt="Go Forward"></div></div>
 
+  <script type="text/javascript">
+
+    function toggle_slidenav() {
+      var left_control = document.getElementById("left-nav"),
+          right_control = document.getElementById("right-nav"),
+          slide_control = document.getElementById("slide-nav");
+
+      if (true) {
+        var control_class = "visible"
+      } else {
+        var control_class = "hidden"
+      }
+
+      left_control.className = control_class;
+      right_control.className = control_class;
+      slide_control.className = control_class;
+    }
+
+    document.getElementById("about-btn").addEventListener("click", function() {toggle_slidenav()});
+
+  </script>
 </body>
 </html>

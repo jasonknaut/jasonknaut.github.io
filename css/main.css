@@ -7,54 +7,98 @@
   font-weight: 300;
   font-size: 14px;
   color: #ffffff;
+  text-align: center;
+}
+
+html {
+  height: 100%;
 }
 
 body {
   margin: 0 auto;
-  min-width: 1000px;
-  min-height: 700px;
-  width:100%;
   height: 100%;
+  min-width: 1000px;
   background-color: #002040;
+}
+
+body, #content, #left-nav, #right-nav {
+  min-height: 700px;
+}
+
+/* TEXT FORMATTING */
+
+h1, h2, h3, h4, p {
+  text-align: left;
+  display: block;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 150%;
+  font-family: 'Roboto', sans-serif;
 }
 
 h1 {
   font-family: 'Libre Baskerville', serif;
   font-size: 36px;
   font-weight: 400;
-  padding-top: 1em;
-  padding-bottom: 0.3em;
+  margin-top: 1em;
+  margin-bottom: 0.3em;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 300;
+  margin-top:2em;
+  margin-bottom:2em;
 }
 
 h3 {
   display: block;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
+  letter-spacing: 0.2em;
   font-size: 14px;
-  padding-top:0.2em;
-  padding-bottom:0.2em;
+  margin-top:0.2em;
+  margin-bottom:0.2em;
   text-transform: uppercase;
+  color: #13639f;
 }
 
 /* PRIMARY LAYOUT FORMATTING */
 
 #content {
-  width: 100%;
+  position: relative;
+  display: block;
   height: 100%;
-  max-width: 800px;
-  margin: auto;
-  text-align: center;
+  overflow: hidden;
 }
 
 #slide-nav {
   position: absolute;
-  margin: auto;
+  margin: 0 auto;
   text-align: center;
   bottom: 0;
   left: 0;
   min-width: 100%;
-  min-height: 75px;
+  min-height: 100px;
+  background: #00192e;
 }
+
+#left-nav, #right-nav {
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 100%;
+  z-index: 1;
+}
+
+#left-nav {
+  left: 0;
+  text-align: right;
+}
+
+#right-nav {
+  right: 0;
+  text-align: left;
+}
+
 
 /* GRAPHICAL ELEMENTS */
 button, .btn-round {
@@ -64,6 +108,9 @@ button, .btn-round {
   transition: background 75ms ease-in-out;
   -webkit-appearance: none;
   -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
 }
 
 button {
@@ -83,10 +130,18 @@ button:hover, .btn-round:hover {
 }
 
 .btn-round {
+    position: relative;
     display: inline-block;
     width: 80px;
     height: 80px;
+    margin: 0 auto;
     border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
 }
 
 .btn-round img {
@@ -94,4 +149,20 @@ button:hover, .btn-round:hover {
     width: 50%;
     padding: 25%;
     height: auto;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 200ms ease-in;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 200ms ease-in, visibility 200ms;
+}
+
+.center {
+  text-align: center;
 }
