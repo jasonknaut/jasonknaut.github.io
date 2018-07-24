@@ -4,6 +4,7 @@
   <title>CS498 Data Viz -- Final Project</title>
   <link href="css/main.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Roboto:100,300,400,700" rel="stylesheet">
+  <script type="text/javascript" src="js/slideviz.js"></script>
   <meta charset='utf-8'>
 </head>
 <body>
@@ -17,10 +18,10 @@
         visitors to take more than [xx] rides throughout the city. The following visualizations explore
         a year of rides across the city, including utilization across individual bikeshare stations, seasonality, and intra-day demand patterns,
         to bring the network to life.</h3>
-        <button id="about-btn" class="text-btn"><img src="images/info-round.svg" alt="About this Visulization"> About this Visualization</button>
+        <button id="about-btn" class="text-btn"><img src="images/info-round.svg" alt="About this Visulization">About this Visualization</button>
         <br />
 
-        <button class="btn-round pulse"><img src="images/right-arrow.svg" alt="Start"></button>
+        <button id="start-btn" class="btn-round pulse"><img src="images/right-arrow.svg" alt="Start"></button>
     </div>
 
     <!-- Slide #2: Monthly Ride Data Plotted on a Geomap of the Citibike System -->
@@ -40,43 +41,25 @@
 
     <!-- Slide #5: About this Visualiztion -->
     <div class="slide-contents offscreen" id="slide-5" data-prev="slide-4">
-      <h1 class="center">Slide 5</h1>
+      <h1 class="center">About This Visualization.</h1>
     </div>
 
 
     <!-- Navigation to select slides in the slideshow -->
     <div id="slide-nav" class="hidden">
-        <button id="slide1-btn" class="slide-btn"><img src="images/home.svg" alt="Home"></button>
-        <button id="slide2-btn" class="slide-btn">1</button>
-        <button id="slide3-btn" class="slide-btn">2</button>
-        <button id="slide4-btn" class="slide-btn">3</button>
-        <button id="slide4-btn" class="slide-btn"><img src="images/info.svg" alt="About the Visualiztion"></button>
+        <button id="slide1-btn" class="slide-btn selected" data-linkedto="slide-1"><img src="images/home.svg" alt="Home"></button>
+        <button id="slide2-btn" class="slide-btn" data-linkedto="slide-2">1</button>
+        <button id="slide3-btn" class="slide-btn" data-linkedto="slide-3">2</button>
+        <button id="slide4-btn" class="slide-btn" data-linkedto="slide-4">3</button>
+        <button id="slide5-btn" class="slide-btn" data-linkedto="slide-5"><img src="images/info.svg" alt="About the Visualiztion"></button>
     </div>
   </div>
-  <div id="left-nav" class="hidden"><div class="btn-round small"><img src="images/left-arrow.svg" alt="Go Back"></div></div>
-  <div id="right-nav" class="hidden"><div class="btn-round small"><img src="images/right-arrow.svg" alt="Go Forward"></div></div>
+  <div id="left-nav" class="hidden"><div id="slide-prev-btn" class="btn-round small"><img src="images/left-arrow.svg" alt="Go Back"></div></div>
+  <div id="right-nav" class="hidden"><div id="slide-next-btn" class="btn-round small"><img src="images/right-arrow.svg" alt="Go Forward"></div></div>
 
   <script type="text/javascript">
 
-    var currentSlide = 'slide-1';
-
-    function toggle_slidenav() {
-      var left_control = document.getElementById("left-nav"),
-          right_control = document.getElementById("right-nav"),
-          slide_control = document.getElementById("slide-nav");
-
-      if (true) {
-        var control_class = "visible"
-      } else {
-        var control_class = "hidden"
-      }
-
-      left_control.className = control_class;
-      right_control.className = control_class;
-      slide_control.className = control_class;
-    }
-
-    document.getElementById("about-btn").addEventListener("click", function() {toggle_slidenav()});
+    slideviz.setup();
 
   </script>
 </body>
