@@ -182,6 +182,13 @@ button:hover, .btn-round:hover, .slide-btn.selected {
     height: auto;
 }
 
+.text-btn img {
+  display: inline;
+  height: 14px;
+  width: auto;
+  margin-right: 10px;
+}
+
 .btn-round img {
     display: inline;
     width: 50%;
