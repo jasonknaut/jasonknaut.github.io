@@ -70,6 +70,25 @@ h3 {
   overflow: hidden;
 }
 
+.slide-contents {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  visibility: visible;
+  opacity: 1;
+}
+
+.slide-contents.offscreen {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transform: translateX(100%);
+     -moz-transform: translateX(100%);
+       -o-transform: translateX(100%);
+      -ms-transform: translateX(100%);
+          transform: translateX(100%);
+}
+
 #slide-nav {
   position: absolute;
   text-align: center;
@@ -178,6 +197,45 @@ button:hover, .btn-round:hover, .slide-btn.selected {
   visibility: hidden;
   opacity: 0;
   transition: opacity 200ms ease-in, visibility 200ms;
+}
+
+.slide-out {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: transform 1s cubic-bezier(1.000, 0.000, 0.000, 1.000), opacity 600ms ease-out, visibility 600ms;
+     -moz-transition: transform 1s cubic-bezier(1.000, 0.000, 0.000, 1.000), opacity 600ms ease-out, visibility 600ms;
+       -o-transition: transform 1s cubic-bezier(1.000, 0.000, 0.000, 1.000), opacity 600ms ease-out, visibility 600ms;
+          transition: transform 1s cubic-bezier(1.000, 0.000, 0.000, 1.000), opacity 600ms ease-out, visibility 600ms;
+}
+
+.slide-in {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: transform 1s cubic-bezier(1.000, 0.000, 0.000, 1.000), opacity 1500ms ease-in, visibility 1.5s;
+     -moz-transition: transform 1s cubic-bezier(1.000, 0.000, 0.000, 1.000), opacity 1500ms ease-in, visibility 1.5s;
+       -o-transition: transform 1s cubic-bezier(1.000, 0.000, 0.000, 1.000), opacity 1500ms ease-in, visibility 1.5s;
+          transition: transform 1s cubic-bezier(1.000, 0.000, 0.000, 1.000), opacity 1500ms ease-in, visibility 1.5s;
+  -webkit-transform: translateX(0);
+     -moz-transform: translateX(0);
+       -o-transform: translateX(0);
+      -ms-transform: translateX(0);
+          transform: translateX(0);
+}
+
+.slide-out.left {
+  -webkit-transform: translateX(-100%);
+     -moz-transform: translateX(-100%);
+       -o-transform: translateX(-100%);
+      -ms-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+
+.slide-out.right {
+  -webkit-transform: translateX(100%);
+     -moz-transform: translateX(100%);
+       -o-transform: translateX(100%);
+      -ms-transform: translateX(100%);
+          transform: translateX(100%);
 }
 
 .center {
