@@ -36,33 +36,52 @@ h1, h2, h3, h4, p {
   font-family: 'Roboto', sans-serif;
 }
 
-h1 {
+h1, h2 {
   font-family: 'Libre Baskerville', serif;
-  font-size: 32px;
   font-weight: 400;
   margin-top: 1em;
   margin-bottom: 0.3em;
   line-height: 150%;
 }
 
-h3 {
-  font-size: 18px;
-  font-weight: 100;
-  margin-top:2em;
-  margin-bottom:2em;
-  line-height: 180%;
-  letter-spacing: 0.05em;
+h1 {
+  font-size: 32px;
 }
 
-h4, h4 a {
+h2 {
+  font-size: 24px;
+}
+
+.byline {
   display: block;
+}
+
+.byline img {
+  display: inline-block;
+  float: left;
+  border-radius: 100%;
+  height: 40px;
+  width: 40px;
+  margin-right: 10px;
+}
+
+.byline a {
+  display: inline-block;
+  color: #13639f;
   letter-spacing: 0.1em;
   font-size: 14px;
   font-weight: 700;
-  margin-top:0.2em;
-  margin-bottom:0.2em;
+  line-height: 40px;
   text-transform: uppercase;
-  color: #13639f;
+}
+
+p.abstract {
+  font-size: 18px;
+  font-weight: 100;
+  margin-top: 1.5em;
+  margin-bottom:2em;
+  line-height: 170%;
+  letter-spacing: 0.05em;
 }
 
 /* PRIMARY LAYOUT FORMATTING */
