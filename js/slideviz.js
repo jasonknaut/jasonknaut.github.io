@@ -54,27 +54,43 @@ slideviz.prevSlide = function() {
 /** goToSlide -- Go to a specific slide (may be forward or backward) **/
 slideviz.goToSlide = function(slide_id) {
 
+  slide_pos = slideviz._slides[slide_id].pos;
+  slide_ids = slideviz._getSlideIds();
+
+  for (var i=0; i < slide_ids.length; i++) {
+    idx = slide_ids[i];
+    pos = slideviz._slides[idx].pos;
+    if (pos < slide_pos) {
+      s_class = "slide-contents offscreen left";
+    } else if (pos > slide_pos) {
+      s_class = "slide-contents offscreen right";
+    } else {
+      s_class = "slide-contents";
+    }
+    document.getElementById(idx).className = s_class;
+  }
+
+  slideviz._current = slide_id;
+  slideviz.refreshNav();
+
 }
 
 /** Show all slide navigation controls **/
 slideviz.refreshNav = function() {
   s = slideviz._slides[slideviz._current]
 
-  //if (s.hide_nav != undefined) {
-  //  slideviz.hideNav();
-  //  return;
-  //}
-  if (s.next) {
-    slideviz.displayNextNav(true);
+  if (s.hide_nav != undefined) {
+    slideviz.hideNav();
+    return;
   }
 
-  if (s.prev) {
-    slideviz.displayPrevNav(true);
-  }
+  has_next = (s.next != undefined);
+  has_prev = (s.prev != undefined);
+  has_selector = (s.btn != undefined);
 
-  if (s.btn) {
-    slideviz.displaySlideNav(true);
-  }
+  slideviz.displayNextNav(has_next);
+  slideviz.displayPrevNav(has_prev);
+  slideviz.displaySlideNav(has_selector);
 
 };
 
@@ -131,10 +147,25 @@ slideviz._getButtonForSlide = function(slideId) {
   return;
 };
 
+slideviz._getSlideIds = function() {
+  slide_ids = [];
+  for(var s in slideviz._slides) {
+    if (slideviz._slides.hasOwnProperty(s)) {
+      slide_ids.push(s);
+    }
+  }
+
+  return slide_ids;
+}
+
 slideviz._slideout = function(slide_id, direction) {
   document.getElementById(slide_id).className = 'slide-contents offscreen ' + direction.toLowerCase();
 }
 
 slideviz._slidein = function(slide_id) {
   document.getElementById(slide_id).className = 'slide-contents';
+}
+
+slideviz._is_left = function(current, other) {
+
 }
