@@ -110,6 +110,16 @@ slideviz.displayNextNav = function(show) {
 };
 
 slideviz.displaySlideNav = function(show) {
+  slide_ids = slideviz._getSlideIds();
+  for (var i=0; i < slide_ids.length; i++) {
+    sid = slide_ids[i];
+    s_btn = slideviz._slides[sid].btn;
+
+    if (s_btn != undefined) {
+      document.getElementById(s_btn).className = (sid == slideviz._current) ? "slide-btn selected" : "slide-btn";
+    }
+  }
+
   document.getElementById("slide-nav").className = show ? "visible" : "hidden";
 };
 
@@ -130,6 +140,13 @@ slideviz._setListeners = function() {
       if (e) {
         e.addEventListener("click", btn_actions[btn]);
       }
+    }
+  }
+
+  var btns = document.getElementsByClassName('slide-btn');
+  for (var i=0; i < btns.length; i++) {
+    if (btns[i].dataset.linkedto != undefined) {
+      btns[i].addEventListener("click", function() { slideviz.goToSlide(this.dataset.linkedto); });
     }
   }
 
@@ -164,8 +181,4 @@ slideviz._slideout = function(slide_id, direction) {
 
 slideviz._slidein = function(slide_id) {
   document.getElementById(slide_id).className = 'slide-contents';
-}
-
-slideviz._is_left = function(current, other) {
-
 }

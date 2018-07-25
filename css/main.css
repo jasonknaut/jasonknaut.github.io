@@ -148,7 +148,7 @@ button, .btn-round {
   background: #033c66;
   cursor: pointer;
   text-align: center;
-  transition: background 75ms ease-in-out;
+  transition: background 150ms ease-in-out;
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
