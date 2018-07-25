@@ -37,27 +37,33 @@ slideviz.setup = function() {
 
 /** nextSlide -- Advance to the next slide **/
 slideviz.nextSlide = function() {
-
+  slideviz._slideout(slideviz._current,"left");
+  slideviz._current = slideviz._slides[slideviz._current].next;
+  slideviz._slidein(slideviz._current);
+  slideviz.refreshNav();
 };
 
 /** prevSlide -- Go back to the previous slide **/
 slideviz.prevSlide = function() {
-
+  slideviz._slideout(slideviz._current,"right");
+  slideviz._current = slideviz._slides[slideviz._current].prev;
+  slideviz._slidein(slideviz._current);
+  slideviz.refreshNav();
 };
 
 /** goToSlide -- Go to a specific slide (may be forward or backward) **/
 slideviz.goToSlide = function(slide_id) {
-  
+
 }
 
 /** Show all slide navigation controls **/
 slideviz.refreshNav = function() {
   s = slideviz._slides[slideviz._current]
 
-  if (s.hide_nav != undefined) {
-    slideviz.hideNav();
-    return;
-  }
+  //if (s.hide_nav != undefined) {
+  //  slideviz.hideNav();
+  //  return;
+  //}
   if (s.next) {
     slideviz.displayNextNav(true);
   }
@@ -96,7 +102,7 @@ slideviz.displaySlideNav = function(show) {
 /** Attach event listeners to UI controls **/
 slideviz._setListeners = function() {
   btn_actions = {
-    "start-btn": slideviz.showNav,
+    "start-btn": slideviz.nextSlide,
     "slide-prev-btn": slideviz.prevSlide,
     "slide-next-btn": slideviz.nextSlide,
     "about-btn": function() { slideviz.goToSlide('slide-about')}
@@ -124,3 +130,11 @@ slideviz._getButtonForSlide = function(slideId) {
 
   return;
 };
+
+slideviz._slideout = function(slide_id, direction) {
+  document.getElementById(slide_id).className = 'slide-contents offscreen ' + direction.toLowerCase();
+}
+
+slideviz._slidein = function(slide_id) {
+  document.getElementById(slide_id).className = 'slide-contents';
+}
