@@ -39,6 +39,8 @@
     <!-- Data Viz Slide #1: Monthly Ride Data Plotted on a Geomap of the Citibike System -->
     <div class="slide-contents offscreen right" id="slide-viz1" data-next="slide-viz2" data-prev="slide-intro">
       <h2 class="center">2017 Citibike Rides by Station</h2>
+      <div id="map-container">
+      </div>
     </div>
 
     <!-- Data Viz Slide #2: Ride Frequency by Day of Week -->
@@ -68,24 +70,62 @@
     /** ------------- SETUP INTERACTIVE SLIDESHOW UI ------------- **/
     slideviz.setup();
 
+
+    /** ------------- COLORS ------------- **/
+    colors = {
+      "navy": "#00192e",
+      "dark_blue": "#002040",
+      "blue": "#033c66",
+      "light_blue": "#13639f"
+    }
+
     /** ------------- D3 SETUP ------------- **/
-    const data_srcs = {
-                    "nyc-hoods": "https://jasonknaut.github.io/data/nyc-neighborhoods.geojson",
-                    "rides-by-station": "data/citibike_2017_rides_by_station.csv",
-                    "rides_by_timeofday": "data/citibike_2017_rides_by_day_and_hour.csv",
-                    "rides_by_weather": "data/citibike_2017_rides_by_weather.csv"
-                   }
+
     d3.queue()
-      .defer(d3.csv, "https://jasonknaut.github.io/data/nyc-neighborhoods.geojson")
+      .defer(d3.json, "data/nyc-neighborhoods.geojson")
       .defer(d3.csv, "data/citibike_2017_rides_by_station.csv")
       .defer(d3.csv, "data/citibike_2017_rides_by_day_and_hour.csv")
       .defer(d3.csv, "data/citibike_2017_rides_by_weather.csv")
-      .await(loadcheck);
+      .await(ready);
 
-    function loadcheck(error, map_data, rides_data, intraday_data, weather_data) {
+    function ready(error, map_data, rides_data, intraday_data, weather_data) {
       console.log("Finished loading.");
-      console.log(rides_data[0]);
+      console.log(map_data[0]);
+      create_map_viz(map_data);
     }
+
+    /** ------------- RIDES BY STATION VIZ ------------- **/
+
+    function create_map_viz(map_data) {
+      const map_width = 500;
+      const map_height = 700;
+      const map_scale = 160000;
+      const map_lat = -73.9812;
+      const map_lon = 40.7331;
+
+      var projection = d3.geoMercator()
+                         .scale(map_scale)
+                         .center([map_lat, map_lon])
+                         .translate([map_width / 2, map_height / 2]);
+
+      var path = d3.geoPath().projection(projection);
+
+      var svg = d3.select('#map-container')
+                  .append('svg')
+                  .attr('width', map_width)
+                  .attr('height', map_height);
+
+      var g = svg.append('g');
+
+      var mapLayer = g.append('g').classed('map-layer', true);
+      mapLayer.selectAll('path')
+               .data(map_data.features)
+               .enter().append('path')
+               .attr('d', path)
+               .style('fill', colors.blue)
+               .style('stroke', colors.dark_blue);
+    }
+
 
     /** ------------- TIME OF DAY DATA VIZ ------------- **/
 

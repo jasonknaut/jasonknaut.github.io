@@ -160,6 +160,17 @@ p.abstract {
   text-align: left;
 }
 
+/* MAP VIZ SLIDE */
+
+#map-container {
+  position: relative;
+  display: block;
+  max-width: 1000px;
+  height: 500px;
+  min-width: 500px;
+  margin: auto;
+}
+
 
 /* UI ELEMENTS */
 button, .btn-round {
