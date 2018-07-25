@@ -7,57 +7,110 @@
   *
  **/
 
-var slideviz = {
-  "_navcontrols": ["left-nav","right-nav","slide-nav"]
-};
+var slideviz = {};
 
 /** Create slide relationships from HTML **/
 slideviz.setup = function() {
   var slides = {};
   var slide_elements = document.getElementsByClassName('slide-contents');
 
-  // Set the current slide
-  slideviz._current = slide_elements[0].id;
-
   // Create relationships between slides and UI elements
+  slideviz._current = slide_elements[0].id;   // Set current slide
   for (var i=0; i < slide_elements.length; i++) {
     var e = slide_elements[i];
     slides[e.id] = {
-                     "pos": i + 1,
-                     "next_slide": e.dataset.next,
-                     "prev_slide": e.dataset.prev,
-                     "btn_id": slideviz._getButtonForSlide(e.id)
+                     "pos": i,
+                     "next": e.dataset.next,
+                     "prev": e.dataset.prev,
+                     "btn": slideviz._getButtonForSlide(e.id),
+                     "hide_nav": e.dataset.hidenav
                    };
+    if (e.dataset.initial != undefined) {
+      slideviz._current = e.id;
+    }
   }
-  slideviz.slides = slides;
+  slideviz._slides = slides;
 
-  // Attach methods to the UI controls
-  slideviz._setListeners()
+  slideviz._setListeners();    // Attach methods to the UI controls
 
 };
 
+/** nextSlide -- Advance to the next slide **/
+slideviz.nextSlide = function() {
+
+};
+
+/** prevSlide -- Go back to the previous slide **/
+slideviz.prevSlide = function() {
+
+};
+
+/** goToSlide -- Go to a specific slide (may be forward or backward) **/
+slideviz.goToSlide = function(slide_id) {
+  
+}
+
 /** Show all slide navigation controls **/
-slideviz.showNav = function() {
-  for(var i=0; i < slideviz._navcontrols.length; i++) {
-    document.getElementById(slideviz._navcontrols[i]).className = "visible";
+slideviz.refreshNav = function() {
+  s = slideviz._slides[slideviz._current]
+
+  if (s.hide_nav != undefined) {
+    slideviz.hideNav();
+    return;
   }
+  if (s.next) {
+    slideviz.displayNextNav(true);
+  }
+
+  if (s.prev) {
+    slideviz.displayPrevNav(true);
+  }
+
+  if (s.btn) {
+    slideviz.displaySlideNav(true);
+  }
+
 };
 
 /** Hide all slide navigation controls **/
 slideviz.hideNav = function() {
-  for(var i=0; i < slideviz._navcontrols.length; i++) {
-    document.getElementById(slideviz._navcontrols[i]).className = "hidden";
-  }
+  slideviz.displayPrevNav(false);
+  slideviz.displayNextNav(false);
+  slideviz.displaySlideNav(false);
+};
+
+slideviz.displayPrevNav = function(show) {
+  document.getElementById("left-nav").className = show ? "visible" : "hidden";
+};
+
+slideviz.displayNextNav = function(show) {
+  document.getElementById("right-nav").className = show ? "visible" : "hidden";
+};
+
+slideviz.displaySlideNav = function(show) {
+  document.getElementById("slide-nav").className = show ? "visible" : "hidden";
 };
 
 /** ------ HELPER FUNCTIONS ----- **/
 
 /** Attach event listeners to UI controls **/
 slideviz._setListeners = function() {
-  var startBtn = document.getElementById("start-btn");
-  if (startBtn != undefined) {
-    startBtn.addEventListener("click", function() {slideviz.showNav()});
+  btn_actions = {
+    "start-btn": slideviz.showNav,
+    "slide-prev-btn": slideviz.prevSlide,
+    "slide-next-btn": slideviz.nextSlide,
+    "about-btn": function() { slideviz.goToSlide('slide-about')}
   }
+
+  for(var btn in btn_actions) {
+    if (btn_actions.hasOwnProperty(btn)) {
+      e = document.getElementById(btn);
+      if (e) {
+        e.addEventListener("click", btn_actions[btn]);
+      }
+    }
+  }
+
 };
 
 /** Find the nav button element associated with a slide **/

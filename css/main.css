@@ -209,16 +209,7 @@ button:hover, .btn-round:hover, .slide-btn.selected {
   height: 120px;
   background: #f2b06f;
   box-shadow: 0 0 0 0 rgba(242,176,111, 0);
-  animation: pulse 2s ease infinite;
-}
-
-.slide-ico {
-  position: relative;
-  display: inline-block;
-  width: 80px;
-  height: 50px;
-  background: #033c66;
-  margin: 25px;
+  animation: pulse 1.5s linear infinite;
 }
 
 .visible {

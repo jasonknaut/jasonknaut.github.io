@@ -10,8 +10,13 @@
 <body>
   <div id="content">
 
-    <!-- Slide #1: Introduction to the Visualization -->
-    <div class="slide-contents" id="slide-1" data-next="slide-2">
+    <!-- Slide: About this Visualiztion -->
+    <div class="slide-contents offscreen" id="slide-about" data-next="slide-intro">
+      <h1 class="center">About This Visualization.</h1>
+    </div>
+
+    <!-- Slide: Introduction to the Visualization -->
+    <div class="slide-contents" id="slide-intro" data-next="slide-viz1" data-initial data-hidenav>
       <h1 class="center">Take a Ride Through the <br/>New York City Bikeshare System.</h1>
       <h4 class="center"><a href="https://www.linkedin.com/in/jknaut" target="_blank">Jason Knaut</a></h4>
       <h3>In 2017, Citibike&#8212;New York City's bikeshare network&#8212;enabled residents, commuters, and
@@ -24,34 +29,28 @@
         <button id="start-btn" class="btn-round pulse"><img src="images/right-arrow.svg" alt="Start"></button>
     </div>
 
-    <!-- Slide #2: Monthly Ride Data Plotted on a Geomap of the Citibike System -->
-    <div class="slide-contents offscreen" id="slide-2" data-next="slide-3" data-prev="slide-1">
+    <!-- Data Viz Slide #1: Monthly Ride Data Plotted on a Geomap of the Citibike System -->
+    <div class="slide-contents offscreen" id="slide-viz1" data-next="slide-viz2" data-prev="slide-intro">
       <h1 class="center">Slide 2</h1>
     </div>
 
-    <!-- Slide #3: Ride Frequency by Day of Week -->
-    <div class="slide-contents offscreen" id="slide-3" data-next="slide-4" data-prev="slide-2">
+    <!-- Data Viz Slide #2: Ride Frequency by Day of Week -->
+    <div class="slide-contents offscreen" id="slide-viz2" data-next="slide-viz3" data-prev="slide-viz1">
       <h1 class="center">Slide 3</h1>
     </div>
 
-    <!-- Slide #4: Distribution of Rides by Time of Day -->
-    <div class="slide-contents offscreen" id="slide-4" data-next="slide-5" data-prev="slide-3">
+    <!-- Data Viz Slide #3: Distribution of Rides by Time of Day -->
+    <div class="slide-contents offscreen" id="slide-viz3" data-prev="slide-viz2">
       <h1 class="center">Slide 4</h1>
-    </div>
-
-    <!-- Slide #5: About this Visualiztion -->
-    <div class="slide-contents offscreen" id="slide-5" data-prev="slide-4">
-      <h1 class="center">About This Visualization.</h1>
     </div>
 
 
     <!-- Navigation to select slides in the slideshow -->
     <div id="slide-nav" class="hidden">
-        <button id="slide1-btn" class="slide-btn selected" data-linkedto="slide-1"><img src="images/home.svg" alt="Home"></button>
-        <button id="slide2-btn" class="slide-btn" data-linkedto="slide-2">1</button>
-        <button id="slide3-btn" class="slide-btn" data-linkedto="slide-3">2</button>
-        <button id="slide4-btn" class="slide-btn" data-linkedto="slide-4">3</button>
-        <button id="slide5-btn" class="slide-btn" data-linkedto="slide-5"><img src="images/info.svg" alt="About the Visualiztion"></button>
+        <button id="slide-btn1" class="slide-btn selected" data-linkedto="slide-intro"><img src="images/home.svg" alt="Home"></button>
+        <button id="slide-btn2" class="slide-btn" data-linkedto="slide-viz1">1</button>
+        <button id="slide-btn3" class="slide-btn" data-linkedto="slide-viz2">2</button>
+        <button id="slide-btn4" class="slide-btn" data-linkedto="slide-viz3">3</button>
     </div>
   </div>
   <div id="left-nav" class="hidden"><div id="slide-prev-btn" class="btn-round small"><img src="images/left-arrow.svg" alt="Go Back"></div></div>
