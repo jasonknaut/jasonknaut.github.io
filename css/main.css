@@ -189,6 +189,7 @@ p.abstract {
 
 #ridebarchart-container {
   height: 100px;
+  margin-bottom: 10px;
 }
 
 #map-container {
@@ -208,6 +209,21 @@ p.abstract {
   transition: fill 150ms ease-in-out;
   stroke: #002040;
   stroke-width: 1px;
+}
+
+#ridebarchart-container svg text.xlabel,
+#ridebarchart-container svg text.xlabel.selected {
+  opacity: 1;
+  fill: #ffffff;
+  font: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+#ridebarchart-container svg text.xlabel {
+
+  fill: #033c66;
 }
 
 
