@@ -197,15 +197,20 @@ p.abstract {
 
 .bar {
   fill: #033c66;
+}
+
+.bar:hover, .bar-selected {
+  fill: #13639f;
+}
+
+.bar, .bar-selected {
   cursor: pointer;
   transition: fill 150ms ease-in-out;
   stroke: #002040;
   stroke-width: 1px;
 }
 
-.bar:hover, .bar-selected {
-  fill: #13639f;
-}
+
 
 
 /* UI ELEMENTS */
