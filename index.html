@@ -26,7 +26,7 @@
       </div>
       <p class="abstract">
         In 2017, Citibike&#8212;New York City's bikeshare network&#8212;enabled residents, commuters, and
-        visitors to take more than [xx] rides throughout the city. The following visualizations explore
+        visitors to take more than 16 million rides throughout the city. The following visualizations explore
         a year of rides across the city, including utilization across individual bikeshare stations, seasonality,
         and intra-day demand patterns, to bring the network to life.
       </p>
@@ -65,18 +65,36 @@
   <div id="left-nav" class="hidden"><div id="slide-prev-btn" class="btn-round small"><img src="images/left-arrow.svg" alt="Go Back"></div></div>
   <div id="right-nav" class="hidden"><div id="slide-next-btn" class="btn-round small"><img src="images/right-arrow.svg" alt="Go Forward"></div></div>
 
+  <div id="tooltip">Test</div>
+
   <script type="text/javascript">
 
     /** ------------- SETUP INTERACTIVE SLIDESHOW UI ------------- **/
     slideviz.setup();
 
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
 
     /** ------------- COLORS ------------- **/
     colors = {
+      "white": "#ffffff",
       "navy": "#00192e",
       "dark_blue": "#002040",
       "blue": "#033c66",
-      "light_blue": "#13639f"
+      "light_blue": "#13639f",
+      "yellow": "#f2b06f",
+      "green": "#4ebe97",
+      "cyan": "#8bcee2",
+      "pink": "#f57295",
+      "purple": "#b154aa",
+      "dark_purple": "#7c5abf"
+
     }
 
     /** ------------- D3 SETUP ------------- **/
@@ -91,21 +109,30 @@
     function ready(error, map_data, rides_data, intraday_data, weather_data) {
       console.log("Finished loading.");
       console.log(map_data[0]);
-      create_map_viz(map_data);
+
+      create_map_viz(map_data, rides_data);
+
+
+
     }
 
     /** ------------- RIDES BY STATION VIZ ------------- **/
 
-    function create_map_viz(map_data) {
-      const map_width = 500;
-      const map_height = 700;
-      const map_scale = 160000;
-      const map_lat = -73.9812;
-      const map_lon = 40.7331;
+    function create_map_viz(map_data, rides_data) {
+      const map_width = 400;
+      const map_height = 500;
+      const map_scale = 150000;
+      const map_lat = -73.9712;
+      const map_long = 40.7331;
+      const pt_minr = 3;
+      const pt_maxr = 15;
+      const pt_opacity = 0.8;
+      const reset_month = 1;      // Start the visualization at January.
 
+      // Create the map of NYC
       var projection = d3.geoMercator()
                          .scale(map_scale)
-                         .center([map_lat, map_lon])
+                         .center([map_lat, map_long])
                          .translate([map_width / 2, map_height / 2]);
 
       var path = d3.geoPath().projection(projection);
@@ -124,8 +151,59 @@
                .attr('d', path)
                .style('fill', colors.blue)
                .style('stroke', colors.dark_blue);
-    }
 
+
+      // Add the stations to the map
+      max_rides = d3.max(rides_data, function(d) { return +d.ride_count;} );
+      var scale = d3.scaleLinear()
+                    .domain([0, max_rides])
+                    .range([pt_minr, pt_maxr]);
+
+      // Create a gradient scale based on # of rides
+      var color_scale = d3.scaleLinear()
+                    .domain([0, 0.1 * max_rides, 0.3 * max_rides, .5 * max_rides, max_rides])
+                    .range([colors.cyan, colors.purple, colors.dark_purple, colors.yellow, colors.pink]);
+
+      var tooltip = d3.select("#tooltip")
+
+      var plotLayer = g.append('g').classed('plot-layer', true);
+      var points = plotLayer.selectAll('circle')
+               .data(rides_data.filter(function(d){return d.ride_month == reset_month;}))
+               .enter().append('circle')
+               .attr("cx", function (d) { return projection([d.long, d.lat])[0]; })
+               .attr("cy", function (d) { return projection([d.long, d.lat])[1]; })
+               .attr("r", function (d) { return scale(d.ride_count); })
+               .style("fill", function (d) { return color_scale(d.ride_count); })
+               .style("fill-opacity", pt_opacity)
+               .attr('stroke',colors.white)
+               .attr('stroke-width',0)
+               .style("cursor", "pointer")
+               .on('mouseover',function(d) {
+                                            d3.select(this)
+                                          	  .transition()
+                                          	  .duration(100)
+                                          	  .attr('stroke-width',2);
+                                            tooltip.transition()
+                                                   .duration(200)
+                                                   .style("opacity", 1);
+                                            tooltip.html("<span>" + d.station + "</span>" + Number(d.ride_count).toLocaleString('en') + " rides in " + monthNames[d.ride_month-1])
+                                                   .style("left", (d3.event.pageX) + 10 + "px")
+                                                   .style("top", (d3.event.pageY) + "px");
+                                          })
+               .on('mouseout',function() {
+                                            d3.select(this)
+                                              .transition()
+                                              .duration(100)
+                                              .attr('stroke-width',0);
+                                            tooltip.transition()
+                                                   .duration(500)
+                                                   .style("opacity", 0);
+                                          });
+
+            // Create bar chart for monthly ride trend
+
+
+     }
 
     /** ------------- TIME OF DAY DATA VIZ ------------- **/
 

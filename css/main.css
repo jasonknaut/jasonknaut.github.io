@@ -160,6 +160,22 @@ p.abstract {
   text-align: left;
 }
 
+#tooltip {
+  position: absolute;
+  opacity:0;
+  z-index: 10;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #00192e;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+#tooltip span {
+  font-weight: 700;
+  margin-right:10px;
+}
+
 /* MAP VIZ SLIDE */
 
 #map-container {
