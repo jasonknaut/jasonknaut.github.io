@@ -134,7 +134,7 @@
 
 
       /** Create the bar chart with total rides by month **/
-      function draw_barchart() {
+      function draw_barchart(update_points) {
 
         var x = d3.scaleBand().rangeRound([0, chart_width])
         var y = d3.scaleLinear().range([chart_height, 0]);
@@ -169,100 +169,138 @@
 
         function click(d) {
           d3.select(".bar-selected").attr("class", "bar");
-
-          d3.select(this)
-            .attr("class", "bar-selected");
-
+          d3.select(this).attr("class", "bar-selected");
           selected_month = +d.key;
-          console.log(selected_month);
+          update_points(selected_month);
         }
 
       }
 
       /** Create the map of NYC **/
       function draw_map() {
+        var projection = d3.geoMercator()
+                           .scale(map_scale)
+                           .center([map_lat, map_long])
+                           .translate([map_width / 2, map_height / 2]);
 
+        var path = d3.geoPath().projection(projection);
+
+        var svg = d3.select('#map-container')
+                    .append('svg')
+                    .attr('width', map_width)
+                    .attr('height', map_height);
+
+        var g = svg.append('g');
+
+        var mapLayer = g.append('g').classed('map-layer', true);
+        var plotLayer = g.append('g').classed('plot-layer', true);
+        var tooltip = d3.select("#tooltip")
+
+        mapLayer.selectAll('path')
+                 .data(map_data.features)
+                 .enter().append('path')
+                 .attr('d', path)
+                 .style('fill', colors.blue)
+                 .style('stroke', colors.dark_blue);
+
+        var total_rides = d3.sum(rides_data, function(d){return +d.ride_count;});
+        d3.select('#map-totalrides').text(Number(total_rides).toLocaleString());
+
+        // Add the stations to the map
+        // Group data by station
+        var station_data = d3.nest()
+                     .key(function(d) { return d.station; }).sortKeys(d3.ascending)
+                     .key(function(d) { return d.ride_month; }).sortKeys((a, b) => d3.ascending(+a, +b))
+                     .entries(rides_data);
+
+        var max_rides = d3.max(rides_data, function(d) { return +d.ride_count;} );
+        var scale = d3.scaleLinear()
+                      .domain([0, max_rides])
+                      .range([pt_minr, pt_maxr]);
+
+        // Create a gradient scale based on # of rides
+        var color_scale = d3.scaleLinear()
+                      .domain([0, 0.1 * max_rides, 0.3 * max_rides, .5 * max_rides, max_rides])
+                      .range([colors.cyan, colors.purple, colors.dark_purple, colors.yellow, colors.pink]);
+
+        function station_coord(station) {
+          lat = +station.values[0].values[0].lat;
+          long = +station.values[0].values[0].long;
+          return [long, lat];
+        }
+
+        function station_rides(station, month) {
+          var rides = 0;
+          for (var i=0; i < station.values.length; i++) {
+            var d = station.values[i];
+            if(d.key == String(month)) {
+              rides = +d.values[0].ride_count;
+            }
+          }
+          return rides;
+        }
+
+        function create_points() {
+          plotLayer.selectAll('circle')
+                   .data(station_data)
+                   .enter().append('circle')
+                   .attr("cx", function (d) { console.log(d.key); return projection(station_coord(d))[0]; })
+                   .attr("cy", function (d) { return projection(station_coord(d))[1]; })
+                   .attr("r", function (d) { return scale(station_rides(d, selected_month)); })
+                   .style("fill", function (d) { return color_scale(station_rides(d, selected_month)); })
+                   .style("fill-opacity", pt_opacity)
+                   .style("visibility", function (d) { return station_rides(d, selected_month) == 0 ? "hidden" : "visible"; })
+                   .attr('stroke',colors.white)
+                   .attr('stroke-width',0)
+                   .style("cursor", "pointer")
+                   .on('mouseover',function(d) {
+                                                d3.select(this)
+                                                  .transition()
+                                                  .duration(100)
+                                                  .attr('stroke-width',2);
+                                                tooltip.transition()
+                                                       .duration(200)
+                                                       .style("opacity", 1);
+                                                tooltip.html("<span>" + d.key + "</span>" + station_rides(d, selected_month).toLocaleString('en') + " rides in " + monthNames[selected_month-1])
+                                                       .style("left", (d3.event.pageX) + 10 + "px")
+                                                       .style("top", (d3.event.pageY) + "px");
+                                              })
+                   .on('mouseout',function() {
+                                                d3.select(this)
+                                                  .transition()
+                                                  .duration(100)
+                                                  .attr('stroke-width',0);
+                                                tooltip.transition()
+                                                       .duration(500)
+                                                       .style("opacity", 0);
+                                              });
+        }
+
+        function update_points(month_id) {
+          plotLayer.selectAll('circle')
+                   .data(station_data)
+                   .attr("cx", function (d) { return projection(station_coord(d))[0]; })
+                   .attr("cy", function (d) { return projection(station_coord(d))[1]; })
+                   .attr("r", function (d) { return scale(station_rides(d, month_id)); })
+                   .transition()
+                   .duration(300)
+                   .style("fill", function (d) { return color_scale(station_rides(d, month_id)); })
+                   .style("fill-opacity", pt_opacity)
+                   .style("visibility", function (d) { return station_rides(d, month_id) == 0 ? "hidden" : "visible"; })
+                   .attr('stroke',colors.white)
+                   .attr('stroke-width',0)
+                   .style("cursor", "pointer")
+        }
+
+
+        create_points();
+
+        return update_points;
 
       }
 
-      draw_map();
-      draw_barchart();
-
-
-      var projection = d3.geoMercator()
-                         .scale(map_scale)
-                         .center([map_lat, map_long])
-                         .translate([map_width / 2, map_height / 2]);
-
-      var path = d3.geoPath().projection(projection);
-
-      var svg = d3.select('#map-container')
-                  .append('svg')
-                  .attr('width', map_width)
-                  .attr('height', map_height);
-
-      var g = svg.append('g');
-
-      var mapLayer = g.append('g').classed('map-layer', true);
-      mapLayer.selectAll('path')
-               .data(map_data.features)
-               .enter().append('path')
-               .attr('d', path)
-               .style('fill', colors.blue)
-               .style('stroke', colors.dark_blue);
-
-      var total_rides = d3.sum(rides_data, function(d){return +d.ride_count;});
-      d3.select('#map-totalrides').text(Number(total_rides).toLocaleString());
-
-      // Add the stations to the map
-      var max_rides = d3.max(rides_data, function(d) { return +d.ride_count;} );
-      var scale = d3.scaleLinear()
-                    .domain([0, max_rides])
-                    .range([pt_minr, pt_maxr]);
-
-      // Create a gradient scale based on # of rides
-      var color_scale = d3.scaleLinear()
-                    .domain([0, 0.1 * max_rides, 0.3 * max_rides, .5 * max_rides, max_rides])
-                    .range([colors.cyan, colors.purple, colors.dark_purple, colors.yellow, colors.pink]);
-
-      var tooltip = d3.select("#tooltip")
-
-      var plotLayer = g.append('g').classed('plot-layer', true);
-      var points = plotLayer.selectAll('circle')
-               .data(rides_data.filter(function(d){return d.ride_month == selected_month;}))
-               .enter().append('circle')
-               .attr("cx", function (d) { return projection([d.long, d.lat])[0]; })
-               .attr("cy", function (d) { return projection([d.long, d.lat])[1]; })
-               .attr("r", function (d) { return scale(d.ride_count); })
-               .style("fill", function (d) { return color_scale(d.ride_count); })
-               .style("fill-opacity", pt_opacity)
-               .attr('stroke',colors.white)
-               .attr('stroke-width',0)
-               .style("cursor", "pointer")
-               .on('mouseover',function(d) {
-                                            d3.select(this)
-                                          	  .transition()
-                                          	  .duration(100)
-                                          	  .attr('stroke-width',2);
-                                            tooltip.transition()
-                                                   .duration(200)
-                                                   .style("opacity", 1);
-                                            tooltip.html("<span>" + d.station + "</span>" + Number(d.ride_count).toLocaleString('en') + " rides in " + monthNames[d.ride_month-1])
-                                                   .style("left", (d3.event.pageX) + 10 + "px")
-                                                   .style("top", (d3.event.pageY) + "px");
-                                          })
-               .on('mouseout',function() {
-                                            d3.select(this)
-                                              .transition()
-                                              .duration(100)
-                                              .attr('stroke-width',0);
-                                            tooltip.transition()
-                                                   .duration(500)
-                                                   .style("opacity", 0);
-                                          });
-
-            // Create bar chart for monthly ride trend
-
+      updater = draw_map();
+      draw_barchart(updater);
 
      }
 
