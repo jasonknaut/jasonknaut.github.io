@@ -38,9 +38,9 @@
 
     <!-- Data Viz Slide #1: Monthly Ride Data Plotted on a Geomap of the Citibike System -->
     <div class="slide-contents offscreen right" id="slide-viz1" data-next="slide-viz2" data-prev="slide-intro">
-      <h2 class="center">2017 Citibike Rides by Station</h2>
-      <div id="map-container">
-      </div>
+      <h1 class="center">Riders Completed <span id="map-totalrides">{insert}</span> Trips Around New York City in 2017.</h1>
+      <div id="ridebarchart-container"></div>
+      <div id="map-container"></div>
     </div>
 
     <!-- Data Viz Slide #2: Ride Frequency by Day of Week -->
@@ -119,6 +119,8 @@
     /** ------------- RIDES BY STATION VIZ ------------- **/
 
     function create_map_viz(map_data, rides_data) {
+      const chart_width = 800;
+      const chart_height = 75;
       const map_width = 400;
       const map_height = 500;
       const map_scale = 150000;
@@ -128,6 +130,43 @@
       const pt_maxr = 15;
       const pt_opacity = 0.8;
       const reset_month = 1;      // Start the visualization at January.
+
+
+      function create_barchart() {
+
+        // Create scales
+        var x = d3.scaleBand().rangeRound([0, chart_width])
+        var y = d3.scaleLinear().range([chart_height, 0]);
+
+        // Summarize data by month
+        var monthlyrides = d3.nest()
+                             .key(function(d) { return +d.ride_month; })
+                             .sortKeys((a, b) => d3.ascending(+a, +b))
+                             .rollup(function(x) { return d3.sum(x, function(d) {return (d.ride_count)}); })
+                             .entries(rides_data);
+
+        x.domain(monthlyrides.map(function(d) { return d.key; }));
+        y.domain([0, d3.max(monthlyrides, function(d) { return d.value; })]);
+
+        var svg = d3.select('#ridebarchart-container')
+                    .append('svg')
+                    .attr('width', chart_width)
+                    .attr('height', chart_height);
+
+        svg.selectAll(".rect")
+           .data(monthlyrides)
+           .enter()
+           .append("rect")
+      	   .attr("class", "bar")
+	         .attr("x", function(d) { return x(d.key); })
+	         .attr("y", function(d) { return y(d.value); })
+	         .attr("width", x.bandwidth())
+	         .attr("height", function(d) { return chart_height - y(d.value); });
+
+      }
+
+      create_barchart();
+
 
       // Create the map of NYC
       var projection = d3.geoMercator()
@@ -152,9 +191,12 @@
                .style('fill', colors.blue)
                .style('stroke', colors.dark_blue);
 
+      var total_rides = d3.sum(rides_data, function(d){return +d.ride_count;});
+      console.log(total_rides);
+      d3.select('#map-totalrides').text(Number(total_rides).toLocaleString());
 
       // Add the stations to the map
-      max_rides = d3.max(rides_data, function(d) { return +d.ride_count;} );
+      var max_rides = d3.max(rides_data, function(d) { return +d.ride_count;} );
       var scale = d3.scaleLinear()
                     .domain([0, max_rides])
                     .range([pt_minr, pt_maxr]);

@@ -36,7 +36,7 @@ h1, h2, h3, h4, p {
   font-family: 'Roboto', sans-serif;
 }
 
-h1, h2 {
+h1, h2, h1 span, h2 span {
   font-family: 'Libre Baskerville', serif;
   font-weight: 400;
   margin-top: 1em;
@@ -44,11 +44,11 @@ h1, h2 {
   line-height: 150%;
 }
 
-h1 {
+h1, h1 span {
   font-size: 32px;
 }
 
-h2 {
+h2, h2 span {
   font-size: 24px;
 }
 
@@ -178,13 +178,33 @@ p.abstract {
 
 /* MAP VIZ SLIDE */
 
+#ridebarchart-container,
 #map-container {
   position: relative;
   display: block;
   max-width: 1000px;
-  height: 500px;
   min-width: 500px;
   margin: auto;
+}
+
+#ridebarchart-container {
+  height: 100px;
+}
+
+#map-container {
+  height: 500px;
+}
+
+.bar {
+  fill: #033c66;
+  cursor: pointer;
+  transition: fill 150ms ease-in-out;
+  stroke: #002040;
+  stroke-width: 1px;
+}
+
+.bar:hover, .bar-selected {
+  fill: #13639f;
 }
 
 
