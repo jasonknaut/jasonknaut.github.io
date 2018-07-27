@@ -114,6 +114,9 @@
       "7": { "short": "Sat", "full": "Saturday"}
     };
 
+    const hourLabel = ["12AM","1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM","11AM","12PM",
+    "1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM"];
+
     function formatHour(hour) {
       if (hour == 0) {
         return "12AM";
@@ -153,8 +156,7 @@
 
     function ready(error, map_data, rides_data, intraday_data, weather_data) {
       create_map_viz(map_data, rides_data);
-      create_grid_viz(intraday_data)
-
+      create_grid_viz(intraday_data);
 
     }
 
@@ -502,19 +504,17 @@
     /** ------------- TIME OF DAY DATA VIZ ------------- **/
     function create_grid_viz(data) {
 
-      const tilesize = 26;
-      const heatmap_width = 24 * tilesize;
-      const heatmap_height = 7 * tilesize;
-
-      const hourchart_height = 50;
-      const hourchart_width = heatmap_width;
-      const daychart_width = 50;
-      const daychart_height = heatmap_height;
+      const canvas_width = 800;
       const margin_left = 20;
-      const margin_top = 20;
-
+      const margin_top = 50;
+      const daychart_width = 50;
+      const hourchart_height = 50;
+      const heatmap_width = canvas_width - margin_left - daychart_width;
+      const tilesize = Math.floor(heatmap_width / 24);
+      const heatmap_height = 7 * tilesize;
+      const hourchart_width = heatmap_width;
+      const daychart_height = heatmap_height;
       const canvas_height = heatmap_height + margin_top + hourchart_height;
-      const canvas_width = heatmap_width + margin_left + daychart_width;
 
       var selected_month = 1;
 
@@ -525,22 +525,27 @@
                     .domain([0, 0.2 * max_rides, 0.4 * max_rides, 0.6 * max_rides, .8 * max_rides, max_rides])
                     .range([colors.light_blue, colors.cyan, colors.dark_purple, colors.purple, colors.yellow, colors.pink]);
 
+      var svg = d3.select('#gridviz-container')
+                  .append('svg')
+                  .attr('width', canvas_width)
+                  .attr('height', canvas_height);
+
+      // Create groups for each of the three charts (heatmap, hour histogram, & day historgram)
+      var heatmap = svg.append('g').classed('heatmap', true)
+                       .attr("transform", "translate(" + margin_left + "," + margin_top + ")");
+      var hour_chart = svg.append('g').classed('hour-chart', true)
+                          .attr("transform", "translate(" + margin_left + "," + (margin_top + heatmap_height) + ")");
+      var day_chart = svg.append('g').classed('day-chart', true)
+                       .attr("transform", "translate(" + (margin_left + heatmap_width) + "," + margin_top + ")");
+      var day_axis = svg.append('g').classed('day-axis', true);
+      var hour_axis = svg.append('g').classed('hour-axis', true)
+                         .attr("transform", "translate(" + margin_left + ", 0)");
+
+
+      var tooltip = d3.select("#tooltip")
 
       /** Draw the hour/week day grid **/
       function draw_grid() {
-        var svg = d3.select('#gridviz-container')
-                    .append('svg')
-                    .attr('width', canvas_width)
-                    .attr('height', canvas_height);
-
-        // Create groups for each of the three charts (heatmap, hour histogram, & day historgram)
-        var heatmap = svg.append('g').classed('heatmap', true)
-                         .attr("transform", "translate(" + margin_left + "," + margin_top + ")");
-        var hour_chart = svg.append('g').classed('hour-chart', true)
-                            .attr("transform", "translate(" + margin_left + "," + (margin_top + heatmap_height) + ")");
-        var day_chart = svg.append('g').classed('day-chart', true)
-                         .attr("transform", "translate(" + (margin_left + heatmap_width) + "," + margin_top + ")");
-        var tooltip = d3.select("#tooltip")
 
         // Create the heapmap
         heatmap.selectAll('rect')
@@ -578,13 +583,55 @@
 
       }
 
-      function getDay(d) {
-        return +d.key
+      function draw_labels() {
+
+        // Draw hour axis
+        hour_axis.selectAll('.xlabel')
+                 .data(hourLabel)
+                 .enter()
+                 .append('text')
+                 .attr('x', function(d,i) { return i*tilesize + 0.5*tilesize; })
+                 .attr('y', margin_top-20)
+                 .classed('xlabel', true)
+                 .text(function(d,i) { return (i % 12 == 0) ? 12 : i % 12; });
+
+      hour_axis.selectAll('.am-pm')
+               .data(hourLabel)
+               .enter()
+               .append('text')
+               .attr('x', function(d,i) { return i*tilesize + 0.5*tilesize; })
+               .attr('y', margin_top - 5)
+               .classed('am-pm', true)
+               .text(function(d,i) { return (i < 12) ? "AM" : "PM"; });
+      }
+
+      // Callback to update grid based on the selected month
+      function update(month_id) {
+
+        // Update the heatmap
+        heatmap.selectAll('rect')
+               .data(data.filter(function(d) { return +d.ride_month == month_id; }))
+               .attr("x", function(d) { return (+d.hour_of_day) * tilesize;})
+               .attr("y", function(d) { return (+d.day_of_week - 1) * tilesize;})
+               .attr("class", "grid-tile")
+               .attr("width", tilesize)
+               .attr("height", tilesize)
+               .style("fill", function (d) { return color_scale(d.ride_count); });
+
+        // Add the selected month to the commentary
+        d3.select('#gridviz-currentmonth')
+          .transition().duration(150)
+          .style("opacity", 0)
+          .transition().duration(150)
+          .style("opacity", 1)
+          .text(monthNames[month_id-1] + " 2017");
       }
 
       // Initialize the visualization
       draw_grid();
-
+      draw_labels();
+      update(selected_month);
+      return update;
 
     }
 
