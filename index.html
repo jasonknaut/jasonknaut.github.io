@@ -44,16 +44,16 @@
         <div id="map-commentary" class="vizslide">
           <h4>Monthly Rides by Station</h4>
           <h3 id="mapviz-currentmonth"></h3>
-          <div id="mo-stat-rides" class="map-stat">
-            <span class="stat">100,000</span>
+          <div class="map-stat">
+            <span id="mo-stat-rides" class="stat"></span>
             <span class="stat-label">Rides</span>
           </div>
-          <div id="mo-stat-active" class="map-stat">
-            <span class="stat">100,000</span>
+          <div class="map-stat">
+            <span id="mo-stat-active" class="stat"></span>
             <span class="stat-label">Active Stations</span>
           </div>
-          <div id="mo-stat-avg" class="map-stat">
-            <span class="stat">100,000</span>
+          <div class="map-stat">
+            <span id="mo-stat-avg" class="stat"></span>
             <span class="stat-label">Avg. Rides per Station</span>
           </div>
         </div>
@@ -194,22 +194,41 @@
            .text(function(d) { return d; });
 
         // Update chart month heading
-        d3.select('#mapviz-currentmonth')
-          .text(monthNames[selected_month-1] + " 2017");
-
+        //d3.select('#mapviz-currentmonth')
+        //  .text(monthNames[selected_month-1] + " 2017");
+        update(selected_month);
+        
         function update(month_id) {
+
+          // Redraw station points on the map
+          update_points(month_id);
+
+          // Format the labels on the bar chart (newly selected month)
           svg.selectAll("text")
              .data(monthNamesShort)
              .transition()
              .duration(200)
              .attr("class", function(d,i) { return i+1 == month_id ? "xlabel selected" : "xlabel"; })
 
-           d3.select('#mapviz-currentmonth')
-             .transition().duration(100)
-             .style("opacity", 0)
-             .transition().duration(100)
-             .style("opacity", 1)
-             .text(monthNames[month_id-1] + " 2017");
+          // Add the selected month to the commentary
+          d3.select('#mapviz-currentmonth')
+            .transition().duration(100)
+            .style("opacity", 0)
+            .transition().duration(100)
+            .style("opacity", 1)
+            .text(monthNames[month_id-1] + " 2017");
+
+          // Update the stats in the commentary
+          stats = rideStats(month_id);
+
+          d3.select('#mo-stat-rides')
+            .text(stats.rides.toLocaleString());
+
+          d3.select('#mo-stat-active')
+            .text(stats.stations.toLocaleString());
+
+          d3.select('#mo-stat-avg')
+            .text(stats.rides_per_station.toLocaleString());
         }
 
 
@@ -218,8 +237,24 @@
           d3.select(".bar-selected").attr("class", "bar");
           d3.select(this).attr("class", "bar-selected");
           selected_month = +d.key;
-          update_points(selected_month);
           update(selected_month);
+        }
+
+        /** Helper to get the stats for the selected month **/
+        function rideStats(month) {
+          var stats = d3.nest()
+                        .key(function(d) { return d.ride_month; })
+                        .rollup(function(v) {
+                                  return {
+                                    stations: v.length,
+                                    rides: d3.sum(v, function(d) { return +d.ride_count; })
+                                  }; })
+                        .entries(
+                          rides_data.filter(function(d) { return +d.ride_month == month & +d.ride_count > 0; })
+                        )[0].value;
+          stats.rides_per_station = Math.round(stats.rides / stats.stations)
+          return stats;
+
         }
 
       }
