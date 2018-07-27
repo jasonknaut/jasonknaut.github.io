@@ -40,7 +40,13 @@
     <div class="slide-contents offscreen right" id="slide-viz1" data-next="slide-viz2" data-prev="slide-intro">
       <h1 class="center">Riders Completed <span id="map-totalrides">{insert}</span> Trips Around New York City in 2017.</h1>
       <div id="ridebarchart-container"></div>
-      <div id="map-container"></div>
+      <div id="mapviz-container" class="clearfix">
+        <div id="map-commentary" class="vizslide">
+          <h4>Monthly Rides by Station</h4>
+          <h3 id="mapviz-currentmonth">{dummy}</h3>
+        </div>
+        <div id="map-container"></div>
+      </div>
     </div>
 
     <!-- Data Viz Slide #2: Ride Frequency by Day of Week -->
@@ -117,9 +123,9 @@
 
     function create_map_viz(map_data, rides_data) {
       const chart_width = 800;
-      const chart_height = 75;
+      const chart_height = 50;
       const axis_height = 25;
-      const map_width = 400;
+      const map_width = 500;
       const map_height = 500;
       const map_scale = 150000;
       const map_lat = -73.9712;
@@ -164,6 +170,7 @@
 	         .attr("height", function(d) { return chart_height - y(d.value); })
            .on("click", click);
 
+        // Add month labels
         svg.selectAll(".xlabel")
            .data(monthNamesShort)
            .enter()
@@ -174,12 +181,23 @@
            .attr("y", chart_height+18)
            .text(function(d) { return d; });
 
+        // Update chart month heading
+        d3.select('#mapviz-currentmonth')
+          .text(monthNames[selected_month-1] + " 2017");
+
         function update(month_id) {
           svg.selectAll("text")
              .data(monthNamesShort)
              .transition()
              .duration(200)
              .attr("class", function(d,i) { return i+1 == month_id ? "xlabel selected" : "xlabel"; })
+
+           d3.select('#mapviz-currentmonth')
+             .transition().duration(100)
+             .style("opacity", 0)
+             .transition().duration(100)
+             .style("opacity", 1)
+             .text(monthNames[month_id-1] + " 2017");
         }
 
 
