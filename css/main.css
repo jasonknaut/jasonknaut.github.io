@@ -301,16 +301,23 @@ p.abstract {
   display: block;
   width: 800px;
   margin: auto;
-  border: 1px white solid;
   text-align: left;
 }
 
-#gridviz-container svg text.xlabel {
+#gridviz-container svg {
+  margin-top: 20px;
+}
+
+#gridviz-container svg text.xlabel,
+#gridviz-container svg text.ylabel {
   fill: #ffffff;
-  font-size: 14px;
-  font-weight: 400;
-  text-anchor: middle;
+  font-size: 12px;
+  font-weight: 300;
   text-transform: uppercase;
+}
+
+#gridviz-container svg text.xlabel {
+  text-anchor: middle;
 }
 
 #gridviz-container svg text.am-pm {

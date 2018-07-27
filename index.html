@@ -114,8 +114,10 @@
       "7": { "short": "Sat", "full": "Saturday"}
     };
 
+    const dayLabel = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
     const hourLabel = ["12AM","1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM","11AM","12PM",
-    "1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM"];
+                       "1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM"];
 
     function formatHour(hour) {
       if (hour == 0) {
@@ -505,10 +507,10 @@
     function create_grid_viz(data) {
 
       const canvas_width = 800;
-      const margin_left = 20;
+      const margin_left = 30;
       const margin_top = 50;
-      const daychart_width = 50;
-      const hourchart_height = 50;
+      const daychart_width = 75;
+      const hourchart_height = 75;
       const heatmap_width = canvas_width - margin_left - daychart_width;
       const tilesize = Math.floor(heatmap_width / 24);
       const heatmap_height = 7 * tilesize;
@@ -537,7 +539,8 @@
                           .attr("transform", "translate(" + margin_left + "," + (margin_top + heatmap_height) + ")");
       var day_chart = svg.append('g').classed('day-chart', true)
                        .attr("transform", "translate(" + (margin_left + heatmap_width) + "," + margin_top + ")");
-      var day_axis = svg.append('g').classed('day-axis', true);
+      var day_axis = svg.append('g').classed('day-axis', true)
+                        .attr("transform", "translate(0,"+margin_top+")");
       var hour_axis = svg.append('g').classed('hour-axis', true)
                          .attr("transform", "translate(" + margin_left + ", 0)");
 
@@ -603,6 +606,15 @@
                .attr('y', margin_top - 5)
                .classed('am-pm', true)
                .text(function(d,i) { return (i < 12) ? "AM" : "PM"; });
+
+      day_axis.selectAll('.ylabel')
+               .data(dayLabel)
+               .enter()
+               .append('text')
+               .attr('x', 0)
+               .attr('y', function(d,i) { return i*tilesize + 0.5*tilesize+5; })
+               .classed('ylabel', true)
+               .text(function(d) { return d; });
       }
 
       // Callback to update grid based on the selected month
