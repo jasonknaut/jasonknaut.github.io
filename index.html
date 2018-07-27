@@ -58,6 +58,7 @@
           </div>
         </div>
         <div id="map-container"></div>
+        <div id="map-legend"></div>
       </div>
     </div>
 
@@ -139,12 +140,14 @@
       const axis_height = 25;
       const map_width = 400;
       const map_height = 500;
-      const map_scale = 150000;
+      const map_scale = 130000;
       const map_lat = -73.9712;
       const map_long = 40.7331;
       const pt_minr = 3;
       const pt_maxr = 12;
       const pt_opacity = 0.8;
+      const legend_height = 35;
+      const legend_width = 250;
 
       var selected_month = 1;      // Start the visualization at January.
 
@@ -331,8 +334,8 @@
 
         // Create a gradient scale based on # of rides
         var color_scale = d3.scaleLinear()
-                      .domain([0, 0.1 * max_rides, 0.3 * max_rides, .45 * max_rides, max_rides])
-                      .range([colors.cyan, colors.purple, colors.dark_purple, colors.yellow, colors.pink]);
+                      .domain([0, 0.1 * max_rides, 0.2 * max_rides, 0.3 * max_rides, .45 * max_rides, max_rides])
+                      .range([colors.light_blue, colors.cyan, colors.dark_purple, colors.purple, colors.yellow, colors.pink]);
 
         function station_coord(station) {
           lat = +station.values[0].values[0].lat;
@@ -388,6 +391,58 @@
                                               });
         }
 
+        /** Create and display the legend **/
+        function draw_legend() {
+
+          var svg = d3.select('#map-legend')
+                      .append('svg')
+                      .attr('width', legend_width)
+                      .attr('height', legend_height);
+
+          //Draw the rectangle and fill with gradient
+          legend = svg.append("g").classed('map-legend-layer', true);
+          var defs = svg.append("defs");
+          var linear_gradient = defs.append("linearGradient")
+                                   .attr("id", "linear-gradient")
+
+          linear_gradient.selectAll("stop")
+                       .data(color_scale.range())
+                       .enter().append("stop")
+                       .attr("offset", function(d,i) { return i/(color_scale.range().length-1); })
+                       .attr("stop-color", function(d) { return d; });
+
+          legend.append('rect')
+                .attr("width", legend_width)
+                .attr("height", 10)
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("rx", 5)
+                .attr("ry", 5)
+                .style("fill", "url(#linear-gradient)");
+
+          legend.append('text')
+                .attr("class", "lg_txt")
+                .attr("y", 25)
+                .attr("x", legend_width / 2)
+                .style("text-anchor", "middle")
+                .text('# of Monthly Rides');
+
+          legend.append('text')
+                .attr("class", "lg_txt")
+                .attr("y", 25)
+                .attr("x", 0)
+                .style("text-anchor", "start")
+                .text(0);
+
+          legend.append('text')
+                .attr("class", "lg_txt")
+                .attr("y", 25)
+                .attr("x", legend_width)
+                .style("text-anchor", "end")
+                .text(max_rides.toLocaleString());
+
+        }
+
         /** Update callback to refresh the display of station ride counts **/
         function update_points(month_id) {
           plotLayer.selectAll('circle')
@@ -406,6 +461,7 @@
         }
 
         create_points();
+        draw_legend();
         return update_points;
 
       }

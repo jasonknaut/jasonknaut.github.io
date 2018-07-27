@@ -256,8 +256,21 @@ p.abstract {
 }
 
 #ridebarchart-container svg text.xlabel {
-
   fill: #033c66;
+}
+
+#map-legend {
+  position: absolute;
+  display: block;
+  bottom: 0px;
+  height: 35px;
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.lg_txt {
+  font-size: 10px;
+  fill: #ffffff;
 }
 
 .map-stat {
@@ -281,8 +294,6 @@ p.abstract {
   color: #13639f;
   text-transform: uppercase;
 }
-
-
 
 /* UI ELEMENTS */
 button, .btn-round {
