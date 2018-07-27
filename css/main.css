@@ -223,11 +223,11 @@ p.abstract {
 }
 
 #map-container {
-  width: 500px;
+  width: 400px;
 }
 
 #map-commentary {
-  width: 300px;
+  width: 400px;
 }
 
 .bar {
@@ -260,6 +260,27 @@ p.abstract {
   fill: #033c66;
 }
 
+.map-stat {
+
+  margin-top: 40px;
+}
+
+.map-stat, .stat, .stat-label {
+  display: block;
+  text-align: left;
+}
+
+.stat {
+  font-weight: 300;
+  font-size: 24px;
+}
+
+.stat-label {
+  font-weight: 700;
+  font-size: 14px;
+  color: #13639f;
+  text-transform: uppercase;
+}
 
 
 

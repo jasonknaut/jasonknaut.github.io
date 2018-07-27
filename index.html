@@ -43,7 +43,19 @@
       <div id="mapviz-container" class="clearfix">
         <div id="map-commentary" class="vizslide">
           <h4>Monthly Rides by Station</h4>
-          <h3 id="mapviz-currentmonth">{dummy}</h3>
+          <h3 id="mapviz-currentmonth"></h3>
+          <div id="mo-stat-rides" class="map-stat">
+            <span class="stat">100,000</span>
+            <span class="stat-label">Rides</span>
+          </div>
+          <div id="mo-stat-active" class="map-stat">
+            <span class="stat">100,000</span>
+            <span class="stat-label">Active Stations</span>
+          </div>
+          <div id="mo-stat-avg" class="map-stat">
+            <span class="stat">100,000</span>
+            <span class="stat-label">Avg. Rides per Station</span>
+          </div>
         </div>
         <div id="map-container"></div>
       </div>
@@ -125,7 +137,7 @@
       const chart_width = 800;
       const chart_height = 50;
       const axis_height = 25;
-      const map_width = 500;
+      const map_width = 400;
       const map_height = 500;
       const map_scale = 150000;
       const map_lat = -73.9712;
