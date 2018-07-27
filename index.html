@@ -194,10 +194,8 @@
            .text(function(d) { return d; });
 
         // Update chart month heading
-        //d3.select('#mapviz-currentmonth')
-        //  .text(monthNames[selected_month-1] + " 2017");
         update(selected_month);
-        
+
         function update(month_id) {
 
           // Redraw station points on the map
@@ -212,23 +210,53 @@
 
           // Add the selected month to the commentary
           d3.select('#mapviz-currentmonth')
-            .transition().duration(100)
+            .transition().duration(150)
             .style("opacity", 0)
-            .transition().duration(100)
+            .transition().duration(150)
             .style("opacity", 1)
             .text(monthNames[month_id-1] + " 2017");
 
           // Update the stats in the commentary
           stats = rideStats(month_id);
 
+          var format = d3.format(",d");
+
           d3.select('#mo-stat-rides')
-            .text(stats.rides.toLocaleString());
+            .transition()
+            .duration(200)
+              .on("start", function repeat() {
+                d3.active(this)
+                    .tween("text", function() {
+                      var that = d3.select(this),
+                          i = d3.interpolateNumber(that.text().replace(/,/g, ""), stats.rides);
+                      return function(t) { that.text(format(i(t))); };
+                    });
+              });
 
           d3.select('#mo-stat-active')
-            .text(stats.stations.toLocaleString());
+            .transition()
+            .duration(200)
+              .on("start", function repeat() {
+                d3.active(this)
+                    .tween("text", function() {
+                      var that = d3.select(this),
+                          i = d3.interpolateNumber(that.text().replace(/,/g, ""), stats.stations);
+                      return function(t) { that.text(format(i(t))); };
+                    });
+              });
 
           d3.select('#mo-stat-avg')
-            .text(stats.rides_per_station.toLocaleString());
+            .transition()
+            .duration(200)
+              .on("start", function repeat() {
+                d3.active(this)
+                    .tween("text", function() {
+                      var that = d3.select(this),
+                          i = d3.interpolateNumber(that.text().replace(/,/g, ""), stats.rides_per_station);
+                      return function(t) { that.text(format(i(t))); };
+                    });
+              });
+
         }
 
 
