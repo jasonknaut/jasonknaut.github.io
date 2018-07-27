@@ -167,7 +167,7 @@ p.abstract {
 #tooltip {
   position: absolute;
   opacity:0;
-  z-index: 10;
+  z-index: 2000;
   padding: 4px 10px;
   border-radius: 20px;
   background: #00192e;
@@ -274,7 +274,6 @@ p.abstract {
 }
 
 .map-stat {
-
   margin-top: 40px;
 }
 
@@ -293,6 +292,21 @@ p.abstract {
   font-size: 14px;
   color: #13639f;
   text-transform: uppercase;
+}
+
+/* GRID VIZ SLIDE */
+
+#gridviz-container {
+    display: block;
+    position: relative;
+    margin-top: 20px;
+}
+
+.grid-tile {
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+  stroke: #002040;
+  stroke-width: 1px;
 }
 
 /* UI ELEMENTS */

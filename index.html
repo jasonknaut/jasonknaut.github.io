@@ -13,7 +13,7 @@
 
     <!-- Slide: About this Visualiztion -->
     <div class="slide-contents offscreen left" id="slide-about" data-next="slide-intro">
-      <h2 class="center">About This Visualization.</h2>
+      <h1 class="center">About This Visualization.</h1>
     </div>
 
     <!-- Slide: Introduction to the Visualization -->
@@ -64,7 +64,12 @@
 
     <!-- Data Viz Slide #2: Ride Frequency by Day of Week -->
     <div class="slide-contents offscreen right" id="slide-viz2" data-next="slide-viz3" data-prev="slide-viz1">
-      <h2 class="center">Slide 3</h2>
+      <h1 class="center">Bikeshare Usage Varies Depending on the Time of Day and Day of Week.</h1>
+      <div id="gridviz-container" class="vizslide">
+        <h4>Rides by Time of Day and Day of Week</h4>
+        <h3 id="gridviz-currentmonth">January 2017</h3>
+      </div>
+      <div id="gridviz"></div>
     </div>
 
     <!-- Data Viz Slide #3: Distribution of Rides by Time of Day -->
@@ -99,6 +104,27 @@
       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
 
+    const dayNames = {
+      "1": { "short": "Sun", "full": "Sunday"},
+      "2": { "short": "Mon", "full": "Monday"},
+      "3": { "short": "Tue", "full": "Tuesday"},
+      "4": { "short": "Wed", "full": "Wednesday"},
+      "5": { "short": "Thu", "full": "Thursday"},
+      "6": { "short": "Fri", "full": "Friday"},
+      "7": { "short": "Sat", "full": "Saturday"}
+    };
+
+    function formatHour(hour) {
+      if (hour == 0) {
+        return "12AM";
+      } else if (hour == 12) {
+        return "NOON";
+      } else if (hour < 12) {
+        return hour + "AM";
+      } else {
+        return hour - 12 + "PM";
+      }
+    }
 
     /** ------------- COLORS ------------- **/
     colors = {
@@ -127,7 +153,7 @@
 
     function ready(error, map_data, rides_data, intraday_data, weather_data) {
       create_map_viz(map_data, rides_data);
-
+      create_grid_viz(intraday_data)
 
 
     }
@@ -457,7 +483,7 @@
                    .style("visibility", function (d) { return station_rides(d, month_id) == 0 ? "hidden" : "visible"; })
                    .attr('stroke',colors.white)
                    .attr('stroke-width',0)
-                   .style("cursor", "pointer")
+                   .style("cursor", "pointer");
         }
 
         create_points();
@@ -474,7 +500,93 @@
      }
 
     /** ------------- TIME OF DAY DATA VIZ ------------- **/
+    function create_grid_viz(data) {
 
+      const tilesize = 26;
+      const heatmap_width = 24 * tilesize;
+      const heatmap_height = 7 * tilesize;
+
+      const hourchart_height = 50;
+      const hourchart_width = heatmap_width;
+      const daychart_width = 50;
+      const daychart_height = heatmap_height;
+      const margin_left = 20;
+      const margin_top = 20;
+
+      const canvas_height = heatmap_height + margin_top + hourchart_height;
+      const canvas_width = heatmap_width + margin_left + daychart_width;
+
+      var selected_month = 1;
+
+      const max_rides = d3.max(data, function(d) { return d.ride_count; });
+
+      // Create a gradient scale based on # of rides
+      var color_scale = d3.scaleLinear()
+                    .domain([0, 0.2 * max_rides, 0.4 * max_rides, 0.6 * max_rides, .8 * max_rides, max_rides])
+                    .range([colors.light_blue, colors.cyan, colors.dark_purple, colors.purple, colors.yellow, colors.pink]);
+
+
+      /** Draw the hour/week day grid **/
+      function draw_grid() {
+        var svg = d3.select('#gridviz-container')
+                    .append('svg')
+                    .attr('width', canvas_width)
+                    .attr('height', canvas_height);
+
+        // Create groups for each of the three charts (heatmap, hour histogram, & day historgram)
+        var heatmap = svg.append('g').classed('heatmap', true)
+                         .attr("transform", "translate(" + margin_left + "," + margin_top + ")");
+        var hour_chart = svg.append('g').classed('hour-chart', true)
+                            .attr("transform", "translate(" + margin_left + "," + (margin_top + heatmap_height) + ")");
+        var day_chart = svg.append('g').classed('day-chart', true)
+                         .attr("transform", "translate(" + (margin_left + heatmap_width) + "," + margin_top + ")");
+        var tooltip = d3.select("#tooltip")
+
+        // Create the heapmap
+        heatmap.selectAll('rect')
+               .data(data.filter(function(d) { return +d.ride_month == selected_month; }))
+               .enter()
+               .append('rect')
+               .attr("x", function(d) { return (+d.hour_of_day) * tilesize;})
+               .attr("y", function(d) { return (+d.day_of_week - 1) * tilesize;})
+               .attr("class", "grid-tile")
+               .attr("width", tilesize)
+               .attr("height", tilesize)
+               .style("fill", function (d) { return color_scale(d.ride_count); })
+               .on('mouseover',function(d) {
+                                            d3.select(this)
+                                              .transition()
+                                              .duration(100)
+                                              .attr('stroke-width',2);
+                                            tooltip.transition()
+                                                   .duration(200)
+                                                   .style("opacity", 1);
+                                            tooltip.html("<span>" + dayNames[d.day_of_week].short + " @ " +formatHour(d.hour_of_day) + "</span>" + Number(d.ride_count).toLocaleString('en') + " rides per hour")
+                                                   .style("left", (d3.event.pageX) + 10 + "px")
+                                                   .style("top", (d3.event.pageY) + "px");
+                                          })
+               .on('mouseout',function() {
+                                            d3.select(this)
+                                              .transition()
+                                              .duration(100)
+                                              .attr('stroke-width',0);
+                                            tooltip.transition()
+                                                   .duration(500)
+                                                   .style("opacity", 0);
+                                          });
+
+
+      }
+
+      function getDay(d) {
+        return +d.key
+      }
+
+      // Initialize the visualization
+      draw_grid();
+
+
+    }
 
   </script>
 </body>
