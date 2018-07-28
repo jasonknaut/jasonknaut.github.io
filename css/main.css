@@ -40,6 +40,10 @@ h1, h2, h3, h4, p {
   font-family: 'Roboto', sans-serif;
 }
 
+h3, h4 {
+  margin: 0px;
+}
+
 h1, h2, h1 span, h2 span {
   font-family: 'Libre Baskerville', serif;
   font-weight: 400;
@@ -173,6 +177,7 @@ p.abstract {
   background: #00192e;
   font-size: 12px;
   line-height: 20px;
+  cursor: pointer;
 }
 
 #tooltip span {
@@ -341,6 +346,11 @@ p.abstract {
 
 #gridviz-container .bar:hover, #gridviz-container .bar-selected {
   fill: #ffffff;
+}
+
+#gridviz-container h4,
+#gridviz-container h3 {
+  width: 800px;
 }
 
 /* UI ELEMENTS */

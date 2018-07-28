@@ -510,7 +510,7 @@
       const margin_left = 30;
       const margin_top = 50;
       const daychart_width = 50;
-      const hourchart_height = 50;
+      const hourchart_height = 75;
       const heatmap_width = canvas_width - margin_left - daychart_width;
       const tilesize = Math.floor(heatmap_width / 24);
       const heatmap_height = 7 * tilesize;
@@ -546,9 +546,6 @@
                                  .sortKeys((a, b) => d3.ascending(+a, +b))
                                  .rollup(function(x) { return d3.max(x, function(d) {return (+d.ride_count)}); })
                                  .entries(data);
-
-      console.log(monthly_max_data);
-
 
       const max_rides_per_hour = maxRidesPerPeriod(hourly_data);
       const max_rides_per_dow = maxRidesPerPeriod(daily_data);
@@ -598,7 +595,8 @@
                                               .transition()
                                               .duration(100)
                                               .attr('stroke-width',2);
-                                            tooltip.transition()
+                                            tooltip.style("visibility","visible")
+                                                   .transition()
                                                    .duration(200)
                                                    .style("opacity", 1);
                                             tooltip.html("<span>" + dayNames[d.day_of_week].short + " @ " +formatHour(d.hour_of_day) + "</span>" + Number(d.ride_count).toLocaleString('en') + " rides per hour")
@@ -612,7 +610,9 @@
                                               .attr('stroke-width',0);
                                             tooltip.transition()
                                                    .duration(500)
-                                                   .style("opacity", 0);
+                                                   .style("opacity", 0)
+                                                   .transition()
+                                                   .style("visibility","hidden");
                                           });
 
 
