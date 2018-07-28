@@ -518,7 +518,7 @@
       const daychart_height = heatmap_height;
       const canvas_height = heatmap_height + margin_top + hourchart_height;
 
-      var selected_month = 10;
+      var selected_month = 1;
 
       const max_rides = d3.max(data, function(d) { return d.ride_count; });
 
@@ -540,14 +540,24 @@
                           .rollup(function(x) { return d3.sum(x, function(d) {return (d.ride_count)}); })
                           .entries(data);
 
+      // Group data by month
+      const monthly_max_data = d3.nest()
+                                 .key(function(d) { return +d.ride_month; })
+                                 .sortKeys((a, b) => d3.ascending(+a, +b))
+                                 .rollup(function(x) { return d3.max(x, function(d) {return (+d.ride_count)}); })
+                                 .entries(data);
+
+      console.log(monthly_max_data);
+
+
       const max_rides_per_hour = maxRidesPerPeriod(hourly_data);
       const max_rides_per_dow = maxRidesPerPeriod(daily_data);
 
 
       // Create a gradient scale based on # of rides
       var color_scale = d3.scaleLinear()
-                    .domain([0, 0.2 * max_rides, 0.4 * max_rides, 0.6 * max_rides, .8 * max_rides, max_rides])
-                    .range([colors.light_blue, colors.cyan, colors.dark_purple, colors.purple, colors.yellow, colors.pink]);
+                    .domain([0, 0.25, 0.5, 0.75, 1])
+                    .range([colors.light_blue, colors.dark_purple, colors.purple, colors.yellow, colors.pink]);
 
       var svg = d3.select('#gridviz-container')
                   .append('svg')
@@ -572,7 +582,7 @@
       /** Draw the hour/week day grid **/
       function draw_grid() {
 
-        // Create the heapmap
+        // Create the heatmap
         heatmap.selectAll('rect')
                .data(data.filter(function(d) { return +d.ride_month == selected_month; }))
                .enter()
@@ -582,7 +592,7 @@
                .attr("class", "grid-tile")
                .attr("width", tilesize)
                .attr("height", tilesize)
-               .style("fill", function (d) { return color_scale(d.ride_count); })
+               .style("fill", function (d) { return color_scale(d.ride_count / getMaxHourlyRides(selected_month)); })
                .on('mouseover',function(d) {
                                             d3.select(this)
                                               .transition()
@@ -648,7 +658,7 @@
                   .append('rect')
                   .attr('x', function(d,i) { return i*tilesize; })
                   .attr('width', tilesize)
-                  .attr('height', function(d) { return getRidesForPeriod(d, selected_month) / max_rides_per_hour * hourchart_height; })
+                  .attr('height', function(d) { return getRidesForPeriod(d.values, selected_month) / max_rides_per_hour * hourchart_height; })
                   .classed('bar', true);
       }
 
@@ -660,7 +670,7 @@
                   .append('rect')
                   .attr('y', function(d,i) { return i*tilesize; })
                   .attr('height', tilesize)
-                  .attr('width', function(d) { return getRidesForPeriod(d, selected_month) / max_rides_per_dow * daychart_width; })
+                  .attr('width', function(d) { return getRidesForPeriod(d.values, selected_month) / max_rides_per_dow * daychart_width; })
                   .classed('bar', true);
       }
 
@@ -675,7 +685,7 @@
                .attr("class", "grid-tile")
                .attr("width", tilesize)
                .attr("height", tilesize)
-               .style("fill", function (d) { return color_scale(d.ride_count); });
+               .style("fill", function (d) { return color_scale(d.ride_count / getMaxHourlyRides(selected_month)); });
 
         // Add the selected month to the commentary
         d3.select('#gridviz-currentmonth')
@@ -701,15 +711,23 @@
         return m;
       }
 
+      // For a data point, get the ride data for the specified month
       function getRidesForPeriod(d, month_id) {
         var r;
-        d.values.forEach( function(m) {
+        d.forEach( function(m) {
           if (+m.key == month_id) {
             r=m.value;
           }
         });
         return r;
       }
+
+      // Get the max rides in an hourly time period for the specified month
+      function getMaxHourlyRides(month_id) {
+        return getRidesForPeriod(monthly_max_data, month_id);
+      }
+
+
 
       /* INITIALIZE THE HEATMAP VIZ */
       draw_grid();

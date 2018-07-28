@@ -335,6 +335,14 @@ p.abstract {
   stroke-width: 1px;
 }
 
+#gridviz-container .bar {
+  fill: #ffffff;
+}
+
+#gridviz-container .bar:hover, #gridviz-container .bar-selected {
+  fill: #ffffff;
+}
+
 /* UI ELEMENTS */
 button, .btn-round {
   display: inline-block;
