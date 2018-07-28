@@ -347,7 +347,7 @@ p.abstract {
 }
 
 #gridviz-container .bar:hover, #gridviz-container .bar-selected {
-  fill: #ffffff;
+  fill: #cccccc;
 }
 
 #gridviz-container h4{

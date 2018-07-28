@@ -703,7 +703,31 @@
                   .attr('x', function(d,i) { return i*tilesize; })
                   .attr('width', tilesize)
                   .attr('height', function(d) { return getRidesForPeriod(d.values, selected_month) / max_rides_per_hour * hourchart_height; })
-                  .classed('bar', true);
+                  .classed('bar', true)
+                  .on('mouseover',function(d) {
+                                               d3.select(this)
+                                                 .transition()
+                                                 .duration(100)
+                                                 .attr('stroke-width',2);
+                                               tooltip.style("visibility","visible")
+                                                      .transition()
+                                                      .duration(200)
+                                                      .style("opacity", 1);
+                                               tooltip.html("<span>" + monthNames[selected_month-1] + " @ " +formatHour(+d.key) + "</span>" + Number(getRidesForPeriod(d.values, selected_month)).toLocaleString('en') + " rides")
+                                                      .style("left", (d3.event.pageX) + 10 + "px")
+                                                      .style("top", (d3.event.pageY) + "px");
+                                             })
+                  .on('mouseout',function() {
+                                               d3.select(this)
+                                                 .transition()
+                                                 .duration(100)
+                                                 .attr('stroke-width',0);
+                                               tooltip.transition()
+                                                      .duration(500)
+                                                      .style("opacity", 0)
+                                                      .transition()
+                                                      .style("visibility","hidden");
+                                             });
       }
 
       /* Draw the distribution by hour bar chart */
@@ -715,7 +739,31 @@
                   .attr('y', function(d,i) { return i*tilesize; })
                   .attr('height', tilesize)
                   .attr('width', function(d) { return getRidesForPeriod(d.values, selected_month) / max_rides_per_dow * daychart_width; })
-                  .classed('bar', true);
+                  .classed('bar', true)
+                  .on('mouseover',function(d) {
+                                               d3.select(this)
+                                                 .transition()
+                                                 .duration(100)
+                                                 .attr('stroke-width',2);
+                                               tooltip.style("visibility","visible")
+                                                      .transition()
+                                                      .duration(200)
+                                                      .style("opacity", 1);
+                                               tooltip.html("<span>" + dayNames[+d.key].full + "s in " +monthNames[selected_month-1]+ "</span>" + Number(getRidesForPeriod(d.values, selected_month)).toLocaleString('en') + " rides")
+                                                      .style("left", (d3.event.pageX) + 10 + "px")
+                                                      .style("top", (d3.event.pageY) + "px");
+                                             })
+                  .on('mouseout',function() {
+                                               d3.select(this)
+                                                 .transition()
+                                                 .duration(100)
+                                                 .attr('stroke-width',0);
+                                               tooltip.transition()
+                                                      .duration(500)
+                                                      .style("opacity", 0)
+                                                      .transition()
+                                                      .style("visibility","hidden");
+                                             });
       }
 
       /** Create and display the legend **/
