@@ -556,8 +556,8 @@
 
       // Create a gradient scale based on # of rides
       var color_scale = d3.scaleLinear()
-                    .domain([0, 0.25, 0.5, 0.75, 1])
-                    .range([colors.light_blue, colors.dark_purple, colors.purple, colors.yellow, colors.pink]);
+                    .domain([0, 0.2, 0.4, 0.5, 0.7, 1])
+                    .range([colors.light_blue, colors.cyan, colors.dark_purple, colors.purple, colors.yellow, colors.pink]);
 
       var svg = d3.select('#gridviz-container')
                   .append('svg')
@@ -685,6 +685,7 @@
                .attr("class", "grid-tile")
                .attr("width", tilesize)
                .attr("height", tilesize)
+               .transition().duration(250)
                .style("fill", function (d) { return color_scale(d.ride_count / getMaxHourlyRides(selected_month)); });
 
         // Add the selected month to the commentary
@@ -694,6 +695,21 @@
           .transition().duration(150)
           .style("opacity", 1)
           .text(monthNames[month_id-1] + " 2017");
+
+        // Update the hour distribution
+        hour_chart.selectAll('rect')
+                  .data(hourly_data)
+                  .transition()
+                  .duration(250)
+                  .attr('height', function(d) { return getRidesForPeriod(d.values, selected_month) / max_rides_per_hour * hourchart_height; });
+
+        // Update the hour distribution
+        day_chart.selectAll('rect')
+                  .data(daily_data)
+                  .transition()
+                  .duration(250)
+                  .attr('width', function(d) { return getRidesForPeriod(d.values, selected_month) / max_rides_per_dow * daychart_width; });
+
       }
 
       /* HELPER FUNCTIONS */
@@ -734,9 +750,15 @@
       draw_labels();
       draw_hour_chart();
       draw_day_chart();
-
       update(selected_month);
-      return update;
+
+      d3.select("#gridviz-container")
+        .select("h3")
+        .on("click", function() {
+          if (selected_month < 12)
+            selected_month += 1;
+          update(selected_month);
+        });
 
     }
 
