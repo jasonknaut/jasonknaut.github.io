@@ -68,8 +68,9 @@
       <div id="gridviz-container" class="vizslide">
         <h4>Rides by Hour and Day of Week</h4>
         <h3 id="gridviz-currentmonth"></h3>
+        <div id="gridviz"></div>
+        <div id="grid-legend"></div>
       </div>
-      <div id="gridviz"></div>
     </div>
 
     <!-- Data Viz Slide #3: Distribution of Rides by Time of Day -->
@@ -506,17 +507,22 @@
     /** ------------- TIME OF DAY DATA VIZ ------------- **/
     function create_grid_viz(data) {
 
+      const legend_height = 35;
+      const legend_width = 250;
+
       const canvas_width = 800;
       const margin_left = 30;
       const margin_top = 50;
+      const annotations_height = 150;
       const daychart_width = 50;
       const hourchart_height = 75;
       const heatmap_width = canvas_width - margin_left - daychart_width;
+      const annotations_width = heatmap_width + daychart_width;
       const tilesize = Math.floor(heatmap_width / 24);
       const heatmap_height = 7 * tilesize;
       const hourchart_width = heatmap_width;
       const daychart_height = heatmap_height;
-      const canvas_height = heatmap_height + margin_top + hourchart_height;
+      const canvas_height = heatmap_height + margin_top + hourchart_height+annotations_height;
 
       var selected_month = 1;
 
@@ -575,6 +581,8 @@
 
 
       var tooltip = d3.select("#tooltip")
+
+      var format = d3.format(",d");
 
       /** Draw the hour/week day grid **/
       function draw_grid() {
@@ -674,6 +682,59 @@
                   .classed('bar', true);
       }
 
+      /** Create and display the legend **/
+      function draw_legend() {
+
+        var svg = d3.select('#grid-legend')
+                    .append('svg')
+                    .attr('width', legend_width)
+                    .attr('height', legend_height);
+
+        //Draw the rectangle and fill with gradient
+        legend = svg.append("g").classed('grid-legend-layer', true);
+        var defs = svg.append("defs");
+        var linear_gradient = defs.append("linearGradient")
+                                 .attr("id", "linear-gradient")
+
+        linear_gradient.selectAll("stop")
+                     .data(color_scale.range())
+                     .enter().append("stop")
+                     .attr("offset", function(d,i) { return i/(color_scale.range().length-1); })
+                     .attr("stop-color", function(d) { return d; });
+
+        legend.append('rect')
+              .attr("width", legend_width)
+              .attr("height", 10)
+              .attr("x", 0)
+              .attr("y", 0)
+              .attr("rx", 5)
+              .attr("ry", 5)
+              .style("fill", "url(#linear-gradient)");
+
+        legend.append('text')
+              .attr("class", "lg_txt")
+              .attr("y", 25)
+              .attr("x", legend_width / 2)
+              .style("text-anchor", "middle")
+              .text('# of Rides');
+
+        legend.append('text')
+              .attr("class", "lg_txt")
+              .attr("y", 25)
+              .attr("x", 0)
+              .style("text-anchor", "start")
+              .text("0");
+
+        legend.append('text')
+              .classed("lg_txt", true)
+              .classed("max-rides", true)
+              .attr("y", 25)
+              .attr("x", legend_width)
+              .style("text-anchor", "end")
+              .text((getMaxHourlyRides(selected_month)).toLocaleString());
+
+      }
+
       // Callback to update grid based on the selected month
       function update(month_id) {
 
@@ -709,6 +770,20 @@
                   .transition()
                   .duration(250)
                   .attr('width', function(d) { return getRidesForPeriod(d.values, selected_month) / max_rides_per_dow * daychart_width; });
+
+        // Update legend max rides count
+        legend.select('.max-rides')
+              .transition()
+              .duration(250)
+              .on("start", function repeat() {
+                d3.active(this)
+                  .tween("text", function() {
+                    var that = d3.select(this),
+                    i = d3.interpolateNumber(that.text().replace(/,/g, ""), getMaxHourlyRides(month_id));
+                    return function(t) { that.text(format(i(t))); };
+                  });
+        });
+
 
       }
 
@@ -750,6 +825,7 @@
       draw_labels();
       draw_hour_chart();
       draw_day_chart();
+      draw_legend();
       update(selected_month);
 
       d3.select("#gridviz-container")

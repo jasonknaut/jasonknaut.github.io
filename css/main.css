@@ -264,7 +264,7 @@ p.abstract {
   fill: #033c66;
 }
 
-#map-legend {
+#map-legend, #grid-legend {
   position: absolute;
   display: block;
   bottom: 0px;
