@@ -189,16 +189,17 @@ p.abstract {
 
 .vizslide h3 {
   font-size: 22px;
+  line-height: 30px;
   text-transform: uppercase;
   font-weight: 400;
   font-family: 'Libre Baskerville', serif;
+  margin: 0 10px;
 }
 
 .vizslide h4 {
   font-size: 16px;
   text-transform: uppercase;
   font-weight: 400;
-  margin-bottom: 0.6em;
   color: #13639f;
 }
 
@@ -307,6 +308,7 @@ p.abstract {
   width: 800px;
   margin: auto;
   text-align: left;
+  padding-top: 20px;
 }
 
 #gridviz-container svg {
@@ -348,10 +350,22 @@ p.abstract {
   fill: #ffffff;
 }
 
-#gridviz-container h4,
-#gridviz-container h3 {
+#gridviz-container h4{
   width: 800px;
 }
+
+.month-selector {
+  display: block;
+  margin: 10px 0;
+  height: 30px;
+}
+
+.month-selector h3, .month-selector .btn-round {
+  float: left;
+  display: inline-block;
+}
+
+
 
 /* UI ELEMENTS */
 button, .btn-round {
@@ -387,7 +401,7 @@ button, .btn-round {
   border-radius: 100%;
 }
 
-button:hover, .btn-round:hover, .slide-btn.selected {
+button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
     background: #13639f;
 }
 
@@ -396,6 +410,13 @@ button:hover, .btn-round:hover, .slide-btn.selected {
     display: inline-block;
     margin: 0 auto;
     border-radius: 100%;
+}
+
+.disabled, .btn-round.tiny.disabled:hover {
+  opacity: .1;
+  cursor: default;
+  background-color: #002040;
+
 }
 
 #left-nav .btn-round, #right-nav .btn-round {
@@ -430,6 +451,13 @@ button:hover, .btn-round:hover, .slide-btn.selected {
 .btn-round.small {
   width: 80px;
   height: 80px;
+}
+
+.btn-round.tiny {
+  width: 26px;
+  height: 26px;
+  margin: 2px 0;
+  background: #002040;
 }
 
 .btn-round.pulse {
