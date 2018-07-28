@@ -44,9 +44,9 @@
         <div id="map-commentary" class="vizslide">
           <h4>Monthly Rides by Station</h4>
           <div class="month-selector">
-            <button class="btn-round tiny disabled"><img src="images/back.svg" alt="Prev Month"></button>
+            <button class="btn-round tiny disabled prev"><img src="images/back.svg" alt="Prev Month"></button>
             <h3 id="mapviz-currentmonth"></h3>
-            <button class="btn-round tiny"><img src="images/next.svg" alt="Next Month"></button>
+            <button class="btn-round tiny next"><img src="images/next.svg" alt="Next Month"></button>
           </div>
           <div class="map-stat">
             <span id="mo-stat-rides" class="stat"></span>
@@ -72,9 +72,9 @@
       <div id="gridviz-container" class="vizslide">
         <h4>Rides by Hour and Day of Week</h4>
         <div class="month-selector">
-          <button class="btn-round tiny disabled"><img src="images/back.svg" alt="Prev Month"></button>
+          <button class="btn-round tiny disabled prev"><img src="images/back.svg" alt="Prev Month"></button>
           <h3 id="gridviz-currentmonth"></h3>
-          <button class="btn-round tiny"><img src="images/next.svg" alt="Next Month"></button>
+          <button class="btn-round tiny next"><img src="images/next.svg" alt="Next Month"></button>
         </div>
         <div id="gridviz"></div>
         <div id="grid-legend"></div>
@@ -590,6 +590,10 @@
 
       var tooltip = d3.select("#tooltip")
 
+      var prev_btn = d3.select("#gridviz-container").select(".prev")
+      var next_btn = d3.select("#gridviz-container").select(".next")
+
+
       var format = d3.format(",d");
 
       /** Draw the hour/week day grid **/
@@ -795,6 +799,17 @@
 
       }
 
+      function onMonthClick(dir) {
+        new_month = selected_month + dir;
+        if (new_month <= 12 & new_month >= 1) {
+          selected_month = new_month;
+          next_btn.classed("disabled", selected_month == 12);
+          prev_btn.classed("disabled", selected_month == 1);
+
+          update(selected_month);
+        }
+      }
+
       /* HELPER FUNCTIONS */
 
       // Max monthly rides that occurred in a given time period (based on first level of nested data)
@@ -826,8 +841,6 @@
         return getRidesForPeriod(monthly_max_data, month_id);
       }
 
-
-
       /* INITIALIZE THE HEATMAP VIZ */
       draw_grid();
       draw_labels();
@@ -836,13 +849,14 @@
       draw_legend();
       update(selected_month);
 
+      // Register event handlers
       d3.select("#gridviz-container")
-        .select("h3")
-        .on("click", function() {
-          if (selected_month < 12)
-            selected_month += 1;
-          update(selected_month);
-        });
+        .select(".next")
+        .on("click", function() { onMonthClick(+1); });
+
+        d3.select("#gridviz-container")
+          .select(".prev")
+          .on("click", function() { onMonthClick(-1); });
 
     }
 
