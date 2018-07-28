@@ -229,11 +229,11 @@ p.abstract {
 }
 
 #map-container {
-  width: 400px;
+  width: 500px;
 }
 
 #map-commentary {
-  width: 400px;
+  width: 300px;
 }
 
 .bar {
@@ -354,6 +354,10 @@ p.abstract {
   width: 800px;
 }
 
+#gridviz {
+  position: relative;
+}
+
 .month-selector {
   display: block;
   margin: 10px 0;
@@ -470,6 +474,29 @@ button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
   box-shadow: 0 0 0 0 rgba(242,176,111, 0);
   animation: pulse 1.5s linear infinite;
 }
+
+.annotation {
+  position: absolute;
+  top: 100px;
+  left: 0px;
+  width: 200px;
+  line-height: 1.1em;
+  font-weight: 300;
+}
+
+.annotation .title {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.annotation span {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+}
+
 
 .visible {
   visibility: visible;

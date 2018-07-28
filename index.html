@@ -61,7 +61,12 @@
             <span class="stat-label">Avg. Rides per Station</span>
           </div>
         </div>
-        <div id="map-container"></div>
+        <div id="map-container">
+          <div class="annotation">
+            <span class="title">Baby it's cold outside!</span>
+            <span>January has the lowest demand for Citibike trips.</span>
+          </div>
+        </div>
         <div id="map-legend"></div>
       </div>
     </div>
@@ -76,7 +81,8 @@
           <h3 id="gridviz-currentmonth"></h3>
           <button class="btn-round tiny next"><img src="images/next.svg" alt="Next Month"></button>
         </div>
-        <div id="gridviz"></div>
+        <div id="gridviz">
+        </div>
         <div id="grid-legend"></div>
       </div>
     </div>
@@ -177,10 +183,10 @@
       const chart_width = 800;
       const chart_height = 50;
       const axis_height = 25;
-      const map_width = 400;
+      const map_width = 500;
       const map_height = 500;
       const map_scale = 130000;
-      const map_lat = -73.9712;
+      const map_lat = -74.0112;
       const map_long = 40.7331;
       const pt_minr = 3;
       const pt_maxr = 12;
@@ -933,6 +939,7 @@
           .on("click", function() { onMonthClick(-1); });
 
     }
+
 
   </script>
 </body>
