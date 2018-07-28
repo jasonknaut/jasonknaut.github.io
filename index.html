@@ -190,6 +190,8 @@
 
       var selected_month = 1;      // Start the visualization at January.
 
+      var prev_btn = d3.select("#mapviz-container").select(".prev")
+      var next_btn = d3.select("#mapviz-container").select(".next")
 
       /** Create the bar chart with total rides by month **/
       function draw_barchart(update_points) {
@@ -242,6 +244,15 @@
 
           // Redraw station points on the map
           update_points(month_id);
+
+          // Disable prev next month selectors if not relevant
+          next_btn.classed("disabled", selected_month == 12);
+          prev_btn.classed("disabled", selected_month == 1);
+
+          // Select the bar for the new month
+          svg.selectAll("rect")
+             .data(monthlyrides)
+             .attr("class", function(d) { return d.key == selected_month ? "bar-selected" : "bar"; });
 
           // Format the labels on the bar chart (newly selected month)
           svg.selectAll("text")
@@ -308,6 +319,19 @@
           d3.select(this).attr("class", "bar-selected");
           selected_month = +d.key;
           update(selected_month);
+        }
+
+        /** Set event listener for month selector clicks **/
+        prev_btn.on("click", function() { onMonthClick(-1); });
+        next_btn.on("click", function() { onMonthClick(+1); });
+
+        /** Month selector callback **/
+        function onMonthClick(dir) {
+          new_month = selected_month + dir;
+          if (new_month <= 12 & new_month >= 1) {
+            selected_month = new_month;
+            update(selected_month);
+          }
         }
 
         /** Helper to get the stats for the selected month **/
@@ -507,8 +531,8 @@
 
 
       // Initialize the visualization
-      updater = draw_map();
-      draw_barchart(updater);
+      point_updater = draw_map();
+      draw_barchart(point_updater);
 
      }
 
