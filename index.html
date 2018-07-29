@@ -1123,7 +1123,7 @@
 
 
       /** Update callback **/
-      function update(month_id) {
+      var update = function(month_id) {
         parent.selectAll('.annotation')
               .data(aArr)
               .classed('hidden', function(d) { return d.month != month_id; })
@@ -1151,7 +1151,7 @@
       },
       {
         "title": "One Hot Spot",
-        "body": "The Pershing Sq North was by far the busiest station in January.",
+        "body": "Pershing Sq North was by far the busiest station in January.",
         "top": 180,
         "left": 20,
         "end_x": 325,
@@ -1176,6 +1176,16 @@
         "end_y": 210,
         "width": 175,
         "month": 4
+      },
+      {
+        "title": "Subway proximity drives demand",
+        "body": "West St & Chambers St. bikeshare station is near a busy subway stop.",
+        "top": 160,
+        "left": 0,
+        "end_x": 245,
+        "end_y": 296,
+        "width": 225,
+        "month": 5
       },
       {
         "title": "Summer leisure riders",
