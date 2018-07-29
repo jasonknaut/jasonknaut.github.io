@@ -370,14 +370,21 @@ p.abstract {
 }
 
 /* ABOUT THE VISUALIZATION */
-#about-container {
+#about-container, #final-container {
   position: relative;
   display: block;
   width: 800px;
   margin: auto;
-  text-align: left;
   padding-top: 20px;
   overflow: auto;
+}
+
+#about-container {
+    text-align: left;
+}
+
+#final-container {
+  text-align: center;
 }
 
 #about-container h3 {
@@ -613,4 +620,33 @@ button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
   0%   { box-shadow: 0 0 0 0 rgba(242,176,111, 0); }
   50%  { box-shadow: 0 0 0 10px rgba(242,176,111, 0.3); }
   100% { box-shadow: 0 0 0 20px rgba(242,176,111, 0.0); }
+}
+
+/** Final slide **/
+button.datasource {
+  text-align: center;
+  border-radius: 20px;
+  min-height: 40px;
+  line-height: 40px;
+  width: 270px;
+  padding: 0 30px;
+}
+
+button.datasource img {
+  display: inline;
+  float: left;
+  height: 20px;
+  padding-top: 7px;
+  padding-bottom: 13px;
+  padding-right: 0;
+}
+
+.datasource div span {
+  display: inline;
+  float: left;
+  padding-left: 10px;
+}
+
+button.datasource div {
+  display: block;
 }

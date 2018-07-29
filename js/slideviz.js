@@ -129,6 +129,7 @@ slideviz.displaySlideNav = function(show) {
 slideviz._setListeners = function() {
   btn_actions = {
     "start-btn": slideviz.nextSlide,
+    "restart-btn": function() { slideviz.goToSlide('slide-intro')},
     "slide-prev-btn": slideviz.prevSlide,
     "slide-next-btn": slideviz.nextSlide,
     "about-btn": function() { slideviz.goToSlide('slide-about')}
