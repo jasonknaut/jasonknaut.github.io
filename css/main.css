@@ -200,7 +200,7 @@ p.abstract {
   font-size: 16px;
   text-transform: uppercase;
   font-weight: 400;
-  color: #13639f;
+  color: #f2b06f;
 }
 
 #ridebarchart-container,
@@ -477,9 +477,8 @@ button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
 
 .annotation {
   position: absolute;
-  top: 100px;
-  left: 0px;
-  width: 200px;
+  visibility: visible;
+  opacity: 1;
   line-height: 1.1em;
   font-weight: 300;
 }
@@ -489,6 +488,7 @@ button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
   font-weight: 700;
   margin-bottom: 4px;
   text-transform: uppercase;
+  color: #13639f;
 }
 
 .annotation span {

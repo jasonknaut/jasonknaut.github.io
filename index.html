@@ -62,10 +62,6 @@
           </div>
         </div>
         <div id="map-container">
-          <div class="annotation">
-            <span class="title">Baby it's cold outside!</span>
-            <span>January has the lowest demand for Citibike trips.</span>
-          </div>
         </div>
         <div id="map-legend"></div>
       </div>
@@ -200,7 +196,7 @@
       var next_btn = d3.select("#mapviz-container").select(".next")
 
       /** Create the bar chart with total rides by month **/
-      function draw_barchart(update_points) {
+      function draw_barchart(update_points, update_anotations) {
 
         var x = d3.scaleBand().rangeRound([0, chart_width])
         var y = d3.scaleLinear().range([chart_height, 0]);
@@ -250,6 +246,9 @@
 
           // Redraw station points on the map
           update_points(month_id);
+
+          // Show/hide annotations
+          update_anotations(month_id);
 
           // Disable prev next month selectors if not relevant
           next_btn.classed("disabled", selected_month == 12);
@@ -514,6 +513,8 @@
 
         }
 
+
+
         /** Update callback to refresh the display of station ride counts **/
         function update_points(month_id) {
           plotLayer.selectAll('circle')
@@ -537,10 +538,17 @@
 
       }
 
+      function draw_annotations() {
+        a = [];
+        callback = buildAnnotation(d3.select('#map-container'), a);
+        return callback;
+      }
 
       // Initialize the visualization
       point_updater = draw_map();
-      draw_barchart(point_updater);
+      anot_updater = draw_annotations();
+
+      draw_barchart(point_updater, anot_updater);
 
      }
 
@@ -940,6 +948,62 @@
 
     }
 
+    /** ANNOTATION BUILDER **/
+    function buildAnnotation(parent, aArr) {
+
+      // TODO -- remove
+      var aArr = [
+        {
+          "title": "Baby, it's cold outside!",
+          "body": "January had the lowest number of trips of any month.",
+          "top": 0,
+          "left": 100,
+          "end_x": 100,
+          "end_y": 100,
+          "width": 175,
+          "month": 1
+        }
+      ];
+
+      // Create the annotation container
+      aDivs = parent.selectAll('.annotation')
+                    .data(aArr)
+                    .enter()
+                    .append('div')
+                    .classed('annotation', true)
+                    .classed('hidden', true)
+                    .style('top', function(d) { return d.top + "px"; })
+                    .style('left', function(d) { return d.left + "px"; })
+                    .style('width', function(d) { return d.width + "px"; });
+
+      // Add the annotation titles
+      aDivs.selectAll('.title')
+           .data(aArr)
+           .enter()
+           .append('span')
+           .classed('title', true)
+           .text(function (d) { console.log(d.title); return d.title; });
+
+      // Add the annotation titles
+      aDivs.selectAll('.body')
+           .data(aArr)
+           .enter()
+           .append('span')
+           .classed('body', true)
+           .text(function (d) { return d.body; });
+
+
+      /** Update callback **/
+      function update(month_id) {
+        parent.selectAll('.annotation')
+              .data(aArr)
+              .classed('hidden', function(d) { return d.month != month_id; } )
+              .classed('visible', function(d) { return d.month == month_id; } )
+      }
+
+      return update;
+
+    }
 
   </script>
 </body>
