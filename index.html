@@ -93,12 +93,54 @@
 
         <h3>Parameters</h3>
         <p>
+        The visual narrative relies on two parameters: 1) frame ("slide") number and 2) month.
         </p>
-
+        <h4>Selected Frame ("Slide") #</h4>
+        <p>
+        The frame ("slide") number parameter has two important contributions for visualization state. First, the frame number is used to determine which slide should be
+        presented to the user. There are four slides in the visualization: "About this Visualization", "Intro", "Rides by Station/Map Visualization", and
+        "Rides by Hour & Day/Heatmap Visualization." More importantly, the frame parameter is mapped to the appropriate dataset. The "Rides by Station" and "Rides by Hour/Day"
+        frames each have their own dataset that must be loaded when this frame parameter is changed.
+        </p>
+        <h4>Selected Month</h4>
+        <p>
+        The second parameter is the selected month. This parameter takes on a value between one and twelve, and controls what scene is shown within the currently selected frame.
+        Changes to the selected month parameter filter the dataset for the current frame to include only data relevant to the month. The selected month parameter also drives
+        which annotations are visible to the user in the current state.
+        </p>
         <h3>Triggers</h3>
         <p>
-
+        This visualization contains numerous triggers to interact with the slideshow. To help the user discover these triggers, I relied on
+        <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank">Neilsen's core UX principles</a>. Most notably, I followed the principle of "consistency
+        and standards." This principle suggests using visual UI elements that a user is familiar with due to widespread use. A few examples include, common previous and next buttons
+        for the slides as well as the left and right "carrots" next to the month header (i.e. to go forward or back one month). In addition, I used common cursor patterns, making sure
+        items with interaction turned the pointer into the "hand" cursor suggesting the item could be clicked or that some event would be triggered by interaction.
         </p>
+        <h4>Frame/Slide Navigation Trigger</h4>
+        <p>
+        The user navigates between the frames/slides of the interactive slideshow using two key triggers. The first trigger includes the large previous and next slide buttons
+        fixed to the left and right rails of the browser. Clicking on these buttons changes the frame parameter (discussed above), which causes a linear slide transition
+        left or right, ultimately redrawing the visualization associated with the previous or next frame.
+        </p>
+        <p>
+        The second trigger for frame/slide navigation is the slide selection bar at the bottom of the browser. This navigation becomes available once the user starts the
+        interactive slideshow from the home screen. In addition to being able to jump to specific frames/slides within the slideshow, this navigation also serves as an
+        indicator of the current position within the slideshow (i.e., slide 1 = Map visualization; slide 2 = Hour/day grid visualization).
+        </p>
+        <h4>Monthly Rides Bar Chart</h4>
+        <p>
+        Within the "Rides by Station" frame, the user can jump to a desired month scene by clicking the appropriate bar in the bar chart at the top of the frame. The ability
+        to interact with this element is accentuated by highlighting the bars as the mouse moves over them. This click event sets the month parameter and redraws the frame.
+        </p>
+        <h4>New York Citiy Map Points</h4>
+        <p>
+        Mousing over any of the "circles" representing bikeshare stations on the map triggers a tooltip with info about the relevant station.
+        </p>
+        <h4>Heatmap/Grid Cells & Histogram Bars</h4>
+        <p>
+        Mousing over the cells of the heatmap visualization or the histogram bars triggers a tooltip with info about the selected hour/day of week.
+        </p>
+        <h3>Enjoy exploring the narrative!</h3>
       </div>
     </div>
 

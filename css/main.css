@@ -382,7 +382,7 @@ p.abstract {
 
 #about-container h3 {
   font-size: 20px;
-  line-height: 30px;
+  line-height: 40px;
   font-weight: 400;
   font-family: 'Libre Baskerville', serif;
 }
@@ -395,10 +395,28 @@ p.abstract {
   margin: 10px 20px;
 }
 
+#about-container h3:last-of-type {
+  margin-bottom: 50px;
+}
+
 #about-container p {
   line-height: 1.5em;
   font-size: 16px;
   margin: 10px 20px;
+}
+
+#about-container a, #about-container a:hover {
+  font-size: 16px;
+  line-height: 1.5em;
+
+}
+
+#about-container a {
+  color: #13639f;
+}
+
+#about-container a:hover {
+  color: #033c66;
 }
 
 
