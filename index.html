@@ -738,7 +738,7 @@
                     .domain([0, 0.2, 0.4, 0.5, 0.7, 1])
                     .range([colors.light_blue, colors.cyan, colors.dark_purple, colors.purple, colors.yellow, colors.pink]);
 
-      var svg = d3.select('#gridviz-container')
+      var svg = d3.select('#gridviz')
                   .append('svg')
                   .attr('width', canvas_width)
                   .attr('height', canvas_height);
@@ -963,8 +963,14 @@
 
       }
 
+      function draw_annotations() {
+        g = d3.select('#gridviz').select('svg').append('g').classed('anot-layer', true);
+        callback = buildAnnotation(d3.select('#gridviz'), g, gridAnnotations);
+        return callback;
+      }
+
       // Callback to update grid based on the selected month
-      function update(month_id) {
+      function update(month_id, anot_callback) {
 
         // Update the heatmap
         heatmap.selectAll('rect')
@@ -999,6 +1005,9 @@
                   .duration(250)
                   .attr('width', function(d) { return getRidesForPeriod(d.values, selected_month) / max_rides_per_dow * daychart_width; });
 
+        // Update annotations
+        anot_callback(month_id);
+
         // Update legend max rides count
         legend.select('.max-rides')
               .transition()
@@ -1015,14 +1024,14 @@
 
       }
 
-      function onMonthClick(dir) {
+      function onMonthClick(dir, anot_callback) {
         new_month = selected_month + dir;
         if (new_month <= 12 & new_month >= 1) {
           selected_month = new_month;
           next_btn.classed("disabled", selected_month == 12);
           prev_btn.classed("disabled", selected_month == 1);
 
-          update(selected_month);
+          update(selected_month, anot_callback);
         }
       }
 
@@ -1063,16 +1072,17 @@
       draw_hour_chart();
       draw_day_chart();
       draw_legend();
-      update(selected_month);
+      anot_callback = draw_annotations();
+      update(selected_month, anot_callback);
 
       // Register event handlers
       d3.select("#gridviz-container")
         .select(".next")
-        .on("click", function() { onMonthClick(+1); });
+        .on("click", function() { onMonthClick(+1, anot_callback); });
 
         d3.select("#gridviz-container")
           .select(".prev")
-          .on("click", function() { onMonthClick(-1); });
+          .on("click", function() { onMonthClick(-1, anot_callback); });
 
     }
 
@@ -1124,13 +1134,14 @@
 
       /** Update callback **/
       var update = function(month_id) {
+        filtered_data = aArr.filter(function(d) { return needsLeader(d); });
         parent.selectAll('.annotation')
               .data(aArr)
               .classed('hidden', function(d) { return d.month != month_id; })
               .classed('visible', function(d) { return d.month == month_id; });
 
         g.selectAll('.leader-line').data(filtered_data)
-                    .classed('hidden', function(d) { return d.month != month_id; })
+                    .classed('hidden',  function(d) { return d.month != month_id; })
                     .classed('visible', function(d) { return d.month == month_id; });
 
       }
@@ -1252,6 +1263,89 @@
         "left": 70,
         "width": 175,
         "month": 11
+      }
+    ];
+
+    var gridAnnotations = [
+      {
+        "title": "Morning Commute",
+        "body": "Even when it's cold, commuters utilize the Citibike system during weekdays.",
+        "top": 350,
+        "left": 50,
+        "end_x": 240+30+15,
+        "end_y": 90+50+15,
+        "width": 200,
+        "month": 1
+      },
+      {
+        "title": "Evening Commute",
+        "body": "The 5-7PM evening commute also creates a spike in demand.",
+        "top": 350,
+        "left": 300,
+        "end_x": 240+30+15+285,
+        "end_y": 90+50+15,
+        "width": 200,
+        "month": 1
+      },
+      {
+        "title": "Morning Commute",
+        "body": "21% of rides occur between 7AM & 10AM.",
+        "top": 350,
+        "left": 240+30-150,
+        "end_x": 240+30+15,
+        "end_y": 300,
+        "width": 150,
+        "month": 2
+      },
+      {
+        "title": "Evening Commute",
+        "body": "26% of rides occur between 4PM & 7PM.",
+        "top": 350,
+        "left": 510+30-150,
+        "end_x": 510+15+30,
+        "end_y": 300,
+        "width": 150,
+        "month": 2
+      },
+      {
+        "title": "Morning Commute",
+        "body": "21% of rides occur between 7AM & 10AM.",
+        "top": 350,
+        "left": 240+30-150,
+        "end_x": 240+30+15,
+        "end_y": 300,
+        "width": 150,
+        "month": 3
+      },
+      {
+        "title": "Evening Commute",
+        "body": "28% of rides occur between 4PM & 7PM.",
+        "top": 350,
+        "left": 510+30-150,
+        "end_x": 510+15+30,
+        "end_y": 300,
+        "width": 150,
+        "month": 3
+      },
+      {
+        "title": "Relaxing weekend rides",
+        "body": "To shake cabin fever, people head out for a leisurely weekend afternoon ride.",
+        "top": 350,
+        "left": 150,
+        "end_x": 450,
+        "end_y": 245,
+        "width": 200,
+        "month": 4
+      },
+      {
+        "title": "Relaxing weekend rides",
+        "body": "To shake cabin fever, people head out for a leisurely weekend afternoon ride.",
+        "top": 350,
+        "left": 150,
+        "end_x": 450,
+        "end_y": 65,
+        "width": 200,
+        "month": 4
       }
     ];
 
