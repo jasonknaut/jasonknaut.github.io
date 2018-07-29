@@ -98,7 +98,7 @@ p.abstract {
   position: relative;
   display: block;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .slide-contents {
@@ -141,7 +141,7 @@ p.abstract {
 }
 
 #slide-nav {
-  position: absolute;
+  position: fixed;
   text-align: center;
   bottom: 0;
   left: 0;
@@ -151,7 +151,7 @@ p.abstract {
 }
 
 #left-nav, #right-nav {
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100px;
   height: 100%;
