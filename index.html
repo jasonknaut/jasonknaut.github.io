@@ -69,7 +69,26 @@
 
         <h3>Annotations</h3>
         <p>
-
+        The visualization uses annotations on select scenes where there is a meaningful trend or point in the data that communicates what, why, or how ride demand is
+        changing over time. General points that apply to the entire narrative are annotated without leader lines. Points of interest that relate to specific aspects
+        of a visual element are annotated with a leader line to the relevant area of interest in the chart.
+        </p>
+        <p>
+        Annotations are used selectively. Not every scene will have an annotation. This is to balance the need to communicate the story while also not unecessarily
+        adding "ink" that makes the visualization more complex to understand or interact with.
+        </p>
+        <h4>Displaying & Clearing</h4>
+        <p>
+        Annotations are attached to individual scenes (i.e. a specific month for the current frame). Therefore, when a user navigates to a new scene, any annotations
+        on the prior scene are hidden and relevant annotations (if any) on the new scene are displayed. Annotations are transitioned in and out using a fade to add
+        another visual indicator of the scene change and to make clear which annotations are no longer relevant and which are relevant to the new scene.
+        </p>
+        <h4>Template</h4>
+        <p>
+        The annotations follow one standard template with a variation for 1) with leader line and 2) no leader line. The template includes: 1) a short heading (in blue) and
+        2) a more detailed key takeaway (in white). When a leader line is required, it is plotted as a white dotted line from the annotation to the relevant area on the
+        visualization. To ensure visual consistency, all annotations are generated from a single "Annotation Factory" method, taking an array of annotations as input, and returning
+        d3 svg elements.
         </p>
 
         <h3>Parameters</h3>
