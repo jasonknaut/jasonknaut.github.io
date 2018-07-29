@@ -292,13 +292,11 @@
       .defer(d3.json, "data/nyc-neighborhoods.geojson")
       .defer(d3.csv, "data/citibike_2017_rides_by_station.csv")
       .defer(d3.csv, "data/citibike_2017_rides_by_day_and_hour.csv")
-      .defer(d3.csv, "data/citibike_2017_rides_by_weather.csv")
       .await(ready);
 
     function ready(error, map_data, rides_data, intraday_data, weather_data) {
       create_map_viz(map_data, rides_data);
       create_grid_viz(intraday_data);
-
     }
 
     /** ------------- RIDES BY STATION VIZ ------------- **/
@@ -1258,10 +1256,10 @@
       },
       {
         "title": "Ridership cools with the weather",
-        "body": "The number of rides drops sharply in November due in part to colder temparatures.",
+        "body": "The number of rides drops sharply due in part to colder temparatures.",
         "top": 40,
         "left": 70,
-        "width": 175,
+        "width": 225,
         "month": 11
       }
     ];
