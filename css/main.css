@@ -479,7 +479,7 @@ button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
   position: absolute;
   visibility: visible;
   opacity: 1;
-  line-height: 1.1em;
+  line-height: 1.2em;
   font-weight: 300;
 }
 
@@ -495,6 +495,13 @@ button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
   display: block;
   text-align: right;
   font-size: 12px;
+}
+
+.leader-line {
+  position: absolute;
+  visibility: visible;
+  opacity: 1;
+  background: #ffffff;
 }
 
 

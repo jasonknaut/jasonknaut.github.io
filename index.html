@@ -956,8 +956,18 @@
         {
           "title": "Baby, it's cold outside!",
           "body": "January had the lowest number of trips of any month.",
-          "top": 0,
-          "left": 100,
+          "top": 200,
+          "left": 50,
+          "end_x": 100,
+          "end_y": 100,
+          "width": 175,
+          "month": 1
+        },
+        {
+          "title": "One hotspot.",
+          "body": "Pershing Sq North had the most trips.",
+          "top": 300,
+          "left": 50,
           "end_x": 100,
           "end_y": 100,
           "width": 175,
@@ -974,24 +984,11 @@
                     .classed('hidden', true)
                     .style('top', function(d) { return d.top + "px"; })
                     .style('left', function(d) { return d.left + "px"; })
-                    .style('width', function(d) { return d.width + "px"; });
+                    .style('width', function(d) { return d.width + "px"; })
 
-      // Add the annotation titles
-      aDivs.selectAll('.title')
-           .data(aArr)
-           .enter()
-           .append('span')
-           .classed('title', true)
-           .text(function (d) { console.log(d.title); return d.title; });
-
-      // Add the annotation titles
-      aDivs.selectAll('.body')
-           .data(aArr)
-           .enter()
-           .append('span')
-           .classed('body', true)
-           .text(function (d) { return d.body; });
-
+      // Add the annotation titles and bodies
+      aDivs.append('span').classed('title', true).text(function(d){ return d.title; });
+      aDivs.append('span').classed('body', true).text(function(d){ return d.body; });
 
       /** Update callback **/
       function update(month_id) {
