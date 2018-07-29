@@ -481,6 +481,7 @@ button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
   opacity: 1;
   line-height: 1.2em;
   font-weight: 300;
+  padding-right: 10px;
 }
 
 .annotation .title {
@@ -498,10 +499,10 @@ button:hover, .btn-round:hover, .slide-btn.selected, .btn-round.tiny:hover {
 }
 
 .leader-line {
-  position: absolute;
-  visibility: visible;
-  opacity: 1;
-  background: #ffffff;
+  stroke-width: 2;
+  stroke-dasharray: 3, 4;
+  stroke-linecap: round;
+  stroke: #ffffff;
 }
 
 

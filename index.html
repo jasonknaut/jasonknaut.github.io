@@ -539,8 +539,8 @@
       }
 
       function draw_annotations() {
-        a = [];
-        callback = buildAnnotation(d3.select('#map-container'), a);
+        g = d3.select('#map-container').select('svg').select('g').append('g').classed('anot-layer', true);
+        callback = buildAnnotation(d3.select('#map-container'), g, mapAnnotations);
         return callback;
       }
 
@@ -949,31 +949,24 @@
     }
 
     /** ANNOTATION BUILDER **/
-    function buildAnnotation(parent, aArr) {
+    function buildAnnotation(parent, g, aArr) {
+      const v_margin = 10;
+      const h_margin = 10;
 
-      // TODO -- remove
-      var aArr = [
-        {
-          "title": "Baby, it's cold outside!",
-          "body": "January had the lowest number of trips of any month.",
-          "top": 200,
-          "left": 50,
-          "end_x": 100,
-          "end_y": 100,
-          "width": 175,
-          "month": 1
-        },
-        {
-          "title": "One hotspot.",
-          "body": "Pershing Sq North had the most trips.",
-          "top": 300,
-          "left": 50,
-          "end_x": 100,
-          "end_y": 100,
-          "width": 175,
-          "month": 1
-        }
-      ];
+      function leaderPath(d) {
+        x1 = d.left+d.width+h_margin;
+        y1 = d.top+v_margin;
+        x2 = d.end_x;
+        y2 = d.end_y;
+
+        return "M"+x1+","+y1+"L"+x2+","+y2;
+      }
+
+      function needsLeader(d) {
+        return (d.end_x != undefined & d.end_y != undefined);
+      }
+
+      filtered_data = aArr.filter(function(d) { return needsLeader(d); });
 
       // Create the annotation container
       aDivs = parent.selectAll('.annotation')
@@ -990,17 +983,131 @@
       aDivs.append('span').classed('title', true).text(function(d){ return d.title; });
       aDivs.append('span').classed('body', true).text(function(d){ return d.body; });
 
+
+
+      g.selectAll('.leader-line')
+                  .data(filtered_data)
+                  .enter()
+                  .append('path')
+                  .attr("d",function(d) { return leaderPath(d); })
+                  .classed('leader-line', true)
+                  .classed('hidden', true);
+
+
       /** Update callback **/
       function update(month_id) {
         parent.selectAll('.annotation')
               .data(aArr)
-              .classed('hidden', function(d) { return d.month != month_id; } )
-              .classed('visible', function(d) { return d.month == month_id; } )
+              .classed('hidden', function(d) { return d.month != month_id; })
+              .classed('visible', function(d) { return d.month == month_id; });
+
+        g.selectAll('.leader-line').data(filtered_data)
+                    .classed('hidden', function(d) { return d.month != month_id; })
+                    .classed('visible', function(d) { return d.month == month_id; });
+
       }
 
       return update;
 
     }
+
+    /** ANNOTATIONS **/
+    var mapAnnotations = [
+      {
+        "title": "Baby, it's cold outside!",
+        "body": "January had the fewest rides of any month; less than 40% of peak monthly demand.",
+        "top": 40,
+        "left": 70,
+        "width": 175,
+        "month": 1
+      },
+      {
+        "title": "One Hot Spot",
+        "body": "The Pershing Sq North was by far the busiest station in January.",
+        "top": 180,
+        "left": 20,
+        "end_x": 325,
+        "end_y": 190,
+        "width": 175,
+        "month": 1
+      },
+      {
+        "title": "Spring has sprung",
+        "body": "Rides nearly doubled from the previous month. Spring weather is likely a contributing factor.",
+        "top": 40,
+        "left": 70,
+        "width": 175,
+        "month": 4
+      },
+      {
+        "title": "Heavy demand south of central park",
+        "body": "While Citibike operates in all five boroughs, demand concentrates in Manhattan--mostly Midtown to Central Park.",
+        "top": 160,
+        "left": 20,
+        "end_x": 250,
+        "end_y": 210,
+        "width": 175,
+        "month": 4
+      },
+      {
+        "title": "Summer leisure riders",
+        "body": "Ridership continues to climb through the summer.",
+        "top": 160,
+        "left": 20,
+        "end_x": 250,
+        "end_y": 210,
+        "width": 175,
+        "month": 6
+      },
+      {
+        "title": "New Manhattan stations",
+        "body": "Citibike extended its network, adding more stations in the northern part of Manhattan.",
+        "top": 10,
+        "left": 100,
+        "end_x": 380,
+        "end_y": 20,
+        "width": 175,
+        "month": 9
+      },
+      {
+        "title": "Expanding in Queens",
+        "body": "Citibike also added more stations throughout Queens in September.",
+        "top": 160,
+        "left": 30,
+        "end_x": 430,
+        "end_y": 170,
+        "width": 200,
+        "month": 9
+      },
+      {
+        "title": "Even more expansion",
+        "body": "Continuing the trend from September, Citibike continues to add stations, expanding the reach in Queens.",
+        "top": 120,
+        "left": 30,
+        "end_x": 450,
+        "end_y": 130,
+        "width": 200,
+        "month": 10
+      },
+      {
+        "title": "New Brooklyn stations",
+        "body": "Citibike also added new stations in Brooklyn.",
+        "top": 300,
+        "left": 0,
+        "end_x": 380,
+        "end_y": 430,
+        "width": 200,
+        "month": 10
+      },
+      {
+        "title": "Rides peak in October",
+        "body": "Ridership reached its max during October in 2017. Nearly 1.9 million rides across the network.",
+        "top": 0,
+        "left": 100,
+        "width": 200,
+        "month": 10
+      }
+    ];
 
   </script>
 </body>
