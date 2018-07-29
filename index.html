@@ -48,11 +48,23 @@
           aspects of the map.
           </p>
           <p>
-          The second frame offers a different view of the Citibike system over the course of 2017. A heatmap and two historgrams form the key visual elements
-          that will underly that monthly scenes for this frame.
+          The second frame offers a different view of the Citibike system over the course of 2017. This frame is composed of a heatmap (the primary visual element) and
+          two historgrams capturing the ride demand by hour and day of the week.
           </p>
           <h4>Scenes</h4>
           <p>
+          The slideshow consists of 24 scenes: 12 monthly scenes for each of the distinct frames. The frame layout ensures visual consistency across each of the
+          monthly scenes and serves as the grounding orientation. The user can step through the individual scenes in order and the frames update
+          using animation to indicate how data changes from one scene to the next. For example, on the map visualization, the points both gradually change size and color when
+          the user navigates to a new scene, giving a visual indication of the trends (e.g., is demand increasing or decreasing at each station month-on-month).
+          The month header also fades completely out and in on transition to make it very clear that the scene has changed. As another example, on the hour/day visualization,
+          the histograms animate height changes between scenes to demonstrate how monthly demand by hour or time of day is trending.
+          </p>
+          <p>
+          As an interactive slideshow, an important characteristic is the ability to explore the detail within each scene before navigating to another scene. For this,
+          I added tooltips over key elements. In the map visualiziation, a user can explore the volume of rides that occurred at each individual station within the
+          current scene. In the hour/day visualization, the user can explore the ride demand within specific cells (i.e., hour/day of week pairs) and on the histograms
+          (i.e., total monthly rides for a particular time of day or day of week).
           </p>
 
         <h3>Annotations</h3>
