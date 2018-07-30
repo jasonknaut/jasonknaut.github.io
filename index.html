@@ -114,7 +114,8 @@
         <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank">Neilsen's core UX principles</a>. Most notably, I followed the principle of "consistency
         and standards." This principle suggests using visual UI elements that a user is familiar with due to widespread use. A few examples include, common previous and next buttons
         for the slides as well as the left and right "carrots" next to the month header (i.e. to go forward or back one month). In addition, I used common cursor patterns, making sure
-        items with interaction turned the pointer into the "hand" cursor suggesting the item could be clicked or that some event would be triggered by interaction.
+        items with interaction turned the pointer into the "hand" cursor suggesting the item could be clicked or that some event would be triggered by interaction. And finally, to
+        make the navigation between months within a given frame, I added a pulsing halo around the month forward navigation to draw the user's attention.
         </p>
         <h4>Frame/Slide Navigation Trigger</h4>
         <p>
@@ -173,7 +174,7 @@
           <div class="month-selector">
             <button class="btn-round tiny disabled prev"><img src="images/back.svg" alt="Prev Month"></button>
             <h3 id="mapviz-currentmonth"></h3>
-            <button class="btn-round tiny next"><img src="images/next.svg" alt="Next Month"></button>
+            <button class="btn-round tiny next clue"><img src="images/next.svg" alt="Next Month"></button>
           </div>
           <div class="map-stat">
             <span id="mo-stat-rides" class="stat"></span>
@@ -202,7 +203,7 @@
         <div class="month-selector">
           <button class="btn-round tiny disabled prev"><img src="images/back.svg" alt="Prev Month"></button>
           <h3 id="gridviz-currentmonth"></h3>
-          <button class="btn-round tiny next"><img src="images/next.svg" alt="Next Month"></button>
+          <button class="btn-round tiny next clue"><img src="images/next.svg" alt="Next Month"></button>
         </div>
         <div id="gridviz">
         </div>
@@ -307,6 +308,12 @@
       create_map_viz(map_data, rides_data);
       create_grid_viz(intraday_data);
     }
+
+    d3.selectAll('.clue')
+      .on('mouseover', function() {
+        d3.select(this)
+          .classed('clue', false);
+      });
 
     /** ------------- RIDES BY STATION VIZ ------------- **/
 
